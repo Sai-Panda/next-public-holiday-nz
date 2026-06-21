@@ -6,6 +6,14 @@ type Holiday = {
   name: string;
   date: string;
   infoUrl?: string;
+  theme?: HolidayTheme;
+};
+
+type HolidayTheme = {
+  backgroundClassName: string;
+  backgroundStyle?: React.CSSProperties;
+  overlays?: React.ReactNode;
+  emoji?: string;
 };
 
 type CountdownParts = {
@@ -18,11 +26,30 @@ type CountdownParts = {
 
 const countdownLegend = ["Days", "Hours", "Minutes", "Seconds"] as const;
 
+const defaultTheme: HolidayTheme = {
+  backgroundClassName:
+    "bg-[radial-gradient(circle_at_top,_#1d4ed8_0,_#1e3a8a_40%,_#172554_100%)]",
+};
+
 const holidaysMetadata: Holiday[] = [
   {
     name: "Matariki",
     date: "2026-07-10",
     infoUrl: "https://www.matariki.com/",
+    theme: {
+      backgroundClassName: "bg-[#020617]",
+      backgroundStyle: {
+        backgroundImage:
+          "radial-gradient(circle at 50% 28%, rgba(59,130,246,0.22) 0%, rgba(30,64,175,0.16) 22%, rgba(2,6,23,0.94) 62%, rgba(2,6,23,1) 100%)",
+      },
+      overlays: (
+        <>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,_rgba(255,255,255,0.9)_1px,transparent_1.5px)] bg-[length:42px_42px] opacity-15" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_76%_28%,rgba(255,255,255,0.95)_0,rgba(255,255,255,0.42)_5px,transparent_18px),radial-gradient(circle_at_72%_32%,rgba(255,255,255,0.85)_0,rgba(255,255,255,0.2)_4px,transparent_14px),radial-gradient(circle_at_80%_38%,rgba(255,255,255,0.7)_0,rgba(255,255,255,0.16)_3px,transparent_12px)] opacity-70" />
+        </>
+      ),
+      emoji: "🌌",
+    },
   },
   {
     name: "Labour Day",
@@ -53,8 +80,10 @@ const formatHolidayDate = (date: string) =>
     timeZone: "Pacific/Auckland",
   }).format(new Date(date));
 
-const formatHolidayName = (name: string) =>
-  name === "Matariki" ? `${name} 🌌` : name;
+const formatHolidayName = (holiday: Holiday) => {
+  const emoji = holiday.theme?.emoji;
+  return emoji ? `${holiday.name} ${emoji}` : holiday.name;
+};
 
 const formatCountdownValues = (parts: CountdownParts) => {
   if (parts.done) {
@@ -90,10 +119,15 @@ export default function Home() {
   const nextHolidayCountdown = getCountdownParts(nextHoliday.date, now);
   const nextHolidayCountdownValues = formatCountdownValues(nextHolidayCountdown);
   const nextHolidayInfoUrl = nextHoliday.infoUrl;
+  const theme = nextHoliday.theme || defaultTheme;
   const supportingHolidays = holidays.slice(1);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,_#1d4ed8_0,_#1e3a8a_40%,_#172554_100%)] text-slate-950">
+    <main
+      className={`relative min-h-screen overflow-hidden text-slate-950 ${theme.backgroundClassName}`}
+      style={theme.backgroundStyle}
+    >
+      {theme.overlays}
       <div className="mx-auto flex w-full max-w-6xl flex-col px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
         <header className="mx-auto max-w-4xl pt-6 text-center sm:pt-10">
           <p className="text-sm font-semibold uppercase tracking-[0.35em] text-sky-200/90">
@@ -110,7 +144,7 @@ export default function Home() {
               Next up
             </p>
             <h2 className="mt-3 text-balance text-6xl font-black tracking-tight text-cyan-300 drop-shadow-[0_12px_30px_rgba(34,211,238,0.35)] sm:text-8xl lg:text-[8.5rem]">
-              {formatHolidayName(nextHoliday.name)}
+              {formatHolidayName(nextHoliday)}
             </h2>
             <p className="mt-4 text-3xl text-sky-100/90 sm:text-4xl">
               On {formatHolidayDate(nextHoliday.date)}
@@ -122,7 +156,7 @@ export default function Home() {
                 rel="noreferrer"
                 target="_blank"
               >
-                Learn more about Matariki
+                Learn more about {nextHoliday.name}
               </a>
             ) : null}
             <p className="mx-auto mt-6 inline-flex rounded-full bg-white/12 px-4 py-2 text-sm font-medium text-white ring-1 ring-inset ring-white/15 backdrop-blur">
@@ -187,7 +221,7 @@ export default function Home() {
                     <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                       <div>
                         <h4 className="text-3xl font-black tracking-tight text-blue-700">
-                          {formatHolidayName(holiday.name)}
+                          {formatHolidayName(holiday)}
                         </h4>
                         <p className="mt-2 text-lg text-slate-900">
                           {formatHolidayDate(holiday.date)}
