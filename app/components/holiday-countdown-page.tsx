@@ -15,6 +15,8 @@ type HolidayTheme = {
   backgroundStyle?: React.CSSProperties;
   overlays?: React.ReactNode;
   emoji?: string;
+  titleClassName?: string;
+  titleDropShadow?: string;
   icon?: {
     src: string;
     alt: string;
@@ -65,6 +67,26 @@ const holidaysMetadata: Holiday[] = [
     infoUrl: "https://nzhistory.govt.nz/page/labour-day-0",
     theme: {
       emoji: "🇳🇿",
+    },
+  },
+  {
+    name: "Christmas Day",
+    date: "2026-12-25",
+    infoUrl: "https://www.govt.nz/browse/work/public-holidays-and-anniversary-dates/public-holidays-and-anniversary-dates-in-2026/",
+    theme: {
+      backgroundClassName: "bg-[#0f1a0f]",
+      backgroundStyle: {
+        backgroundImage:
+          "radial-gradient(circle at 50% 20%, rgba(220,38,38,0.28) 0%, rgba(185,28,28,0.14) 25%, rgba(15,26,15,0.96) 65%, rgba(15,26,15,1) 100%)",
+      },
+      overlays: (
+        <>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_15%,rgba(220,38,38,0.18)_0%,transparent_50%),radial-gradient(circle_at_70%_10%,rgba(34,197,94,0.14)_0%,transparent_45%),radial-gradient(circle_at_50%_80%,rgba(220,38,38,0.1)_0%,transparent_50%)]" />
+        </>
+      ),
+      titleClassName:
+        "text-red-400 drop-shadow-[0_12px_30px_rgba(220,38,38,0.45)]",
+      emoji: "🎅",
     },
   },
 ];
@@ -227,10 +249,9 @@ export default function HolidayCountdownPage({
 
         <div className="mx-auto mt-8 w-full max-w-5xl px-2 sm:mt-12 sm:px-6 lg:px-12">
           <div className="text-center">
-            {/* <p className="text-sm font-semibold uppercase tracking-[0.35em] text-sky-100/70 sm:text-base">
-              Next up
-            </p> */}
-            <h2 className="mt-3 text-balance text-6xl font-black tracking-tight text-cyan-300 drop-shadow-[0_12px_30px_rgba(34,211,238,0.35)] sm:text-8xl lg:text-[8.5rem]">
+            <h2
+              className={`mt-3 text-balance text-6xl font-black tracking-tight sm:text-8xl lg:text-[8.5rem] ${theme.titleClassName ?? "text-cyan-300 drop-shadow-[0_12px_30px_rgba(34,211,238,0.35)]"}`}
+            >
               {formatHolidayName(nextHoliday)}
             </h2>
             <p className="mt-4 text-3xl text-sky-100/90 sm:text-4xl">
