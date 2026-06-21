@@ -178,12 +178,24 @@ export default function HolidayCountdownPage({
     ];
   }, [previewNextHolidayName]);
 
-  const nextHoliday = holidays[0];
+  const upcomingHolidayIndex = holidays.findIndex(
+    (holiday) => getTargetTime(holiday.date) > now,
+  );
+  const orderedHolidays = previewNextHolidayName
+    ? holidays
+    : upcomingHolidayIndex <= 0
+      ? holidays
+      : [
+          ...holidays.slice(upcomingHolidayIndex),
+          ...holidays.slice(0, upcomingHolidayIndex),
+        ];
+
+  const nextHoliday = orderedHolidays[0];
   const nextHolidayCountdown = getCountdownParts(nextHoliday.date, now);
   const nextHolidayCountdownValues = formatCountdownValues(nextHolidayCountdown);
   const nextHolidayInfoUrl = nextHoliday.infoUrl;
   const theme = { ...defaultTheme, ...nextHoliday.theme };
-  const supportingHolidays = holidays.slice(1);
+  const supportingHolidays = orderedHolidays.slice(1);
 
   return (
     <main
