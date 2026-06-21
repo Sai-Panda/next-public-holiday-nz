@@ -155,11 +155,11 @@ export default function Home() {
     >
       {theme.overlays}
       <div className="mx-auto flex w-full max-w-6xl flex-col px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
-        <header className="mx-auto max-w-4xl pt-6 text-center sm:pt-10">
+        <header className="mx-auto max-w-5xl pt-6 text-center sm:pt-10">
           <p className="text-sm font-semibold uppercase tracking-[0.35em] text-sky-200/90">
             New Zealand National Public Holidays
           </p>
-          <h1 className="mt-4 text-balance text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
+          <h1 className="mx-auto mt-4 max-w-[22ch] text-4xl font-black tracking-tight text-white sm:max-w-[40rem] sm:text-5xl lg:max-w-[49rem] lg:text-6xl">
             When is the next NZ National Public Holiday?
           </h1>
         </header>
@@ -250,11 +250,11 @@ export default function Home() {
                           {formatHolidayDate(holiday.date)}
                         </p>
                       </div>
-                      <div className="rounded-2xl bg-red-50 px-4 py-3 text-right ring-1 ring-inset ring-red-100">
-                        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-red-700">
+                      <div className="rounded-2xl bg-slate-100 px-4 py-3 text-right ring-1 ring-inset ring-slate-200">
+                        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-black">
                           Countdown
                         </p>
-                        <p className="mt-1 font-mono text-2xl font-bold text-red-600">
+                        <p className="mt-1 font-mono text-2xl font-bold text-black">
                           {formatCountdownValues(countdown).join(":")}
                         </p>
                       </div>
