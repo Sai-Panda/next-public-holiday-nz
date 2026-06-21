@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 
 type Holiday = {
   name: string;
@@ -14,6 +15,10 @@ type HolidayTheme = {
   backgroundStyle?: React.CSSProperties;
   overlays?: React.ReactNode;
   emoji?: string;
+  icon?: {
+    src: string;
+    alt: string;
+  };
 };
 
 type CountdownParts = {
@@ -80,8 +85,29 @@ const formatHolidayDate = (date: string) =>
     timeZone: "Pacific/Auckland",
   }).format(new Date(date));
 
-const formatHolidayName = (holiday: Holiday) => {
+const formatHolidayName = (holiday: Holiday, size: "large" | "small" = "large") => {
+  const icon = holiday.theme?.icon;
   const emoji = holiday.theme?.emoji;
+  
+  if (icon) {
+    const sizeClass = size === "large" 
+      ? "h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24" 
+      : "h-7 w-7 sm:h-8 sm:w-8";
+    
+    return (
+      <span className="inline-flex items-center gap-2 sm:gap-3">
+        {holiday.name}{" "}
+        <Image
+          src={icon.src}
+          alt={icon.alt}
+          width={128}
+          height={128}
+          className={sizeClass}
+        />
+      </span>
+    );
+  }
+  
   return emoji ? `${holiday.name} ${emoji}` : holiday.name;
 };
 
@@ -218,7 +244,7 @@ export default function Home() {
                     <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                       <div>
                         <h4 className="text-3xl font-black tracking-tight text-blue-700">
-                          {formatHolidayName(holiday)}
+                          {formatHolidayName(holiday, "small")}
                         </h4>
                         <p className="mt-2 text-lg text-slate-900">
                           {formatHolidayDate(holiday.date)}
