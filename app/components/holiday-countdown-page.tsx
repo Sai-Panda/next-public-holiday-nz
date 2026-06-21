@@ -140,6 +140,21 @@ const formatCountdownValues = (parts: CountdownParts) => {
 const normalizeHolidayName = (value: string) =>
   value.trim().toLocaleLowerCase("en-NZ");
 
+const getClosestUpcomingHolidayIndex = (holidays: Holiday[], now: number) => {
+  let closestIndex = -1;
+  let closestDiff = Number.POSITIVE_INFINITY;
+
+  holidays.forEach((holiday, index) => {
+    const diff = getTargetTime(holiday.date) - now;
+    if (diff > 0 && diff < closestDiff) {
+      closestDiff = diff;
+      closestIndex = index;
+    }
+  });
+
+  return closestIndex;
+};
+
 export default function HolidayCountdownPage({
   previewNextHolidayName,
 }: HolidayCountdownPageProps) {
@@ -178,9 +193,7 @@ export default function HolidayCountdownPage({
     ];
   }, [previewNextHolidayName]);
 
-  const upcomingHolidayIndex = holidays.findIndex(
-    (holiday) => getTargetTime(holiday.date) > now,
-  );
+  const upcomingHolidayIndex = getClosestUpcomingHolidayIndex(holidays, now);
   const orderedHolidays = previewNextHolidayName
     ? holidays
     : upcomingHolidayIndex <= 0
