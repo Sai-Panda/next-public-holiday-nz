@@ -15,7 +15,7 @@ Build and maintain a beautiful Next.js app that shows countdowns for the next Ne
 - Reuse existing patterns and helpers before introducing new abstractions.
 - Preserve type safety; avoid `any` unless there is no safer alternative.
 - Prefer server-first/data-fetching patterns that fit modern Next.js guidance.
-- Keep UX simple, fast, and mobile-friendly.
+- Keep UX mobile-first, simple, fast, and polished on larger screens too.
 
 ## Code style
 - Use clear names over clever shortcuts.

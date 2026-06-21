@@ -9,8 +9,9 @@
 
 ## Current focus
 1. Build a polished countdown experience for upcoming NZ public holidays.
-2. Keep implementation lightweight and readable.
-3. Prioritize correctness of holiday dates and display clarity.
+2. Make the experience mobile-first while still looking beautiful on desktop and web views.
+3. Keep implementation lightweight and readable.
+4. Prioritize correctness of holiday dates and display clarity.
 
 ## Constraints
 - Use App Router conventions.
