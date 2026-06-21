@@ -35,7 +35,7 @@ const holidaysMetadata: Holiday[] = [
   {
     name: "Matariki",
     date: "2026-07-10",
-    infoUrl: "https://www.matariki.com/",
+    infoUrl: "https://www.matariki.com/about",
     theme: {
       backgroundClassName: "bg-[#020617]",
       backgroundStyle: {
@@ -159,9 +159,6 @@ export default function Home() {
                 Learn more about {nextHoliday.name}
               </a>
             ) : null}
-            <p className="mx-auto mt-6 inline-flex rounded-full bg-white/12 px-4 py-2 text-sm font-medium text-white ring-1 ring-inset ring-white/15 backdrop-blur">
-              All times are in NZDT
-            </p>
           </div>
 
           <div
