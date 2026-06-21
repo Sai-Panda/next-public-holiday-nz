@@ -72,7 +72,7 @@ const holidaysMetadata: Holiday[] = [
   {
     name: "Christmas Day",
     date: "2026-12-25",
-    infoUrl: "https://www.govt.nz/browse/work/public-holidays-and-anniversary-dates/public-holidays-and-anniversary-dates-in-2026/",
+    infoUrl: "https://nzhistory.govt.nz/culture/kiwi-christmas",
     theme: {
       backgroundClassName: "bg-[#0f1a0f]",
       backgroundStyle: {
