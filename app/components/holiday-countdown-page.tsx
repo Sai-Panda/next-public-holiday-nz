@@ -53,7 +53,6 @@ const holidaysMetadata: Holiday[] = [
       },
       overlays: (
         <>
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,_rgba(255,255,255,0.9)_1px,transparent_1.5px)] bg-[length:42px_42px] opacity-15" />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_76%_28%,rgba(255,255,255,0.95)_0,rgba(255,255,255,0.42)_5px,transparent_18px),radial-gradient(circle_at_72%_32%,rgba(255,255,255,0.85)_0,rgba(255,255,255,0.2)_4px,transparent_14px),radial-gradient(circle_at_80%_38%,rgba(255,255,255,0.7)_0,rgba(255,255,255,0.16)_3px,transparent_12px)] opacity-70" />
         </>
       ),
@@ -222,15 +221,15 @@ export default function HolidayCountdownPage({
             New Zealand National Public Holidays
           </p>
           <h1 className="mx-auto mt-4 max-w-[22ch] text-4xl font-black tracking-tight text-white sm:max-w-[40rem] sm:text-5xl lg:max-w-[49rem] lg:text-6xl">
-            When is the next NZ National Public Holiday?
+            What is the next NZ National Public Holiday?
           </h1>
         </header>
 
         <div className="mx-auto mt-8 w-full max-w-5xl px-2 sm:mt-12 sm:px-6 lg:px-12">
           <div className="text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-sky-100/70 sm:text-base">
+            {/* <p className="text-sm font-semibold uppercase tracking-[0.35em] text-sky-100/70 sm:text-base">
               Next up
-            </p>
+            </p> */}
             <h2 className="mt-3 text-balance text-6xl font-black tracking-tight text-cyan-300 drop-shadow-[0_12px_30px_rgba(34,211,238,0.35)] sm:text-8xl lg:text-[8.5rem]">
               {formatHolidayName(nextHoliday)}
             </h2>
