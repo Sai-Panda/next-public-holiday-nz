@@ -2,26 +2,8 @@
 
 import { Fragment, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-
-type Holiday = {
-  name: string;
-  date: string;
-  infoUrl?: string;
-  theme?: HolidayTheme;
-};
-
-type HolidayTheme = {
-  backgroundClassName?: string;
-  backgroundStyle?: React.CSSProperties;
-  overlays?: React.ReactNode;
-  emoji?: string;
-  titleClassName?: string;
-  titleDropShadow?: string;
-  icon?: {
-    src: string;
-    alt: string;
-  };
-};
+import { HolidayTheme, Holiday } from "../types/holiday";
+import { getClosestUpcomingHolidayIndex, getTargetTime } from "../util/holiday.util";
 
 type CountdownParts = {
   days: number;
@@ -30,7 +12,6 @@ type CountdownParts = {
   seconds: number;
   done: boolean;
 };
-
 
 const countdownLegend = ["Days", "Hours", "Minutes", "Seconds"] as const;
 
@@ -88,7 +69,6 @@ const holidaysMetadata: Holiday[] = [
   },
 ];
 
-const getTargetTime = (date: string) => new Date(date).getTime();
 
 const getCountdownParts = (date: string, now: number): CountdownParts => {
   const diff = Math.max(0, getTargetTime(date) - now);
@@ -153,21 +133,6 @@ const formatCountdownValues = (parts: CountdownParts) => {
     pad(parts.minutes),
     pad(parts.seconds),
   ];
-};
-
-const getClosestUpcomingHolidayIndex = (holidays: Holiday[], now: number) => {
-  let closestIndex = -1;
-  let closestDiff = Number.POSITIVE_INFINITY;
-
-  holidays.forEach((holiday, index) => {
-    const diff = getTargetTime(holiday.date) - now;
-    if (diff > 0 && diff < closestDiff) {
-      closestDiff = diff;
-      closestIndex = index;
-    }
-  });
-
-  return closestIndex;
 };
 
 export default function HolidayCountdownPage() {
