@@ -135,16 +135,24 @@ const formatCountdownValues = (parts: CountdownParts) => {
   ];
 };
 
-export default function HolidayCountdownPage() {
-  const [now, setNow] = useState(() => Date.now());
+type HolidayCountdownPageProps = {
+  simulatedNow?: number;
+};
+
+export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownPageProps = {}) {
+  const [now, setNow] = useState(() => simulatedNow ?? Date.now());
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setNow(Date.now());
+      if (simulatedNow !== undefined) {
+        setNow((prevNow) => prevNow + 1000);
+      } else {
+        setNow(Date.now());
+      }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [simulatedNow]);
 
   const holidays = useMemo(() => {
     return [...holidaysMetadata].sort((a, b) => a.date.localeCompare(b.date));
