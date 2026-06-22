@@ -1,4 +1,5 @@
 import HolidayCountdownPage from "@/app/components/holiday-countdown-page";
+import { getTime } from "@/app/util/holiday.util";
 import { notFound } from "next/navigation";
 
 type DevPageProps = {
@@ -7,7 +8,7 @@ type DevPageProps = {
 
 export default async function Dev({ searchParams }: DevPageProps) {
   const { date } = await searchParams;
-  const simulatedNow = date ? new Date(date).getTime() : undefined;
+  const simulatedNow = date ? getTime(date) : undefined;
   const validSimulatedNow =
     simulatedNow !== undefined && !isNaN(simulatedNow) ? simulatedNow : undefined;
 

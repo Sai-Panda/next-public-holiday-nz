@@ -1,17 +1,14 @@
 "use client";
 
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Image from "next/image";
-import { HolidayTheme, Holiday } from "../types/holiday";
-import { getClosestUpcomingHolidayIndex, getTime } from "../util/holiday.util";
-
-type CountdownParts = {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-  done: boolean;
-};
+import { HolidayTheme, Holiday, CountdownParts } from "../types/holiday";
+import {
+  getClosestUpcomingHolidayIndex,
+  getHolidaysAfterDate,
+  getTime,
+} from "../util/holiday.util";
+import { holidays } from "../types/holidays";
 
 const countdownLegend = ["Days", "Hours", "Minutes", "Seconds"] as const;
 
@@ -19,56 +16,6 @@ const defaultTheme: HolidayTheme = {
   backgroundClassName:
     "bg-[radial-gradient(circle_at_top,_#1d4ed8_0,_#1e3a8a_40%,_#172554_100%)]",
 };
-
-const holidaysMetadata: Holiday[] = [
-  {
-    name: "Matariki",
-    date: "2026-07-10",
-    infoUrl: "https://www.matariki.com/about",
-    theme: {
-      backgroundClassName: "bg-[#020617]",
-      backgroundStyle: {
-        backgroundImage:
-          "radial-gradient(circle at 50% 28%, rgba(59,130,246,0.22) 0%, rgba(30,64,175,0.16) 22%, rgba(2,6,23,0.94) 62%, rgba(2,6,23,1) 100%)",
-      },
-      overlays: (
-        <>
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_76%_28%,rgba(255,255,255,0.95)_0,rgba(255,255,255,0.42)_5px,transparent_18px),radial-gradient(circle_at_72%_32%,rgba(255,255,255,0.85)_0,rgba(255,255,255,0.2)_4px,transparent_14px),radial-gradient(circle_at_80%_38%,rgba(255,255,255,0.7)_0,rgba(255,255,255,0.16)_3px,transparent_12px)] opacity-70" />
-        </>
-      ),
-      emoji: "🌌",
-    },
-  },
-  {
-    name: "Labour Day",
-    date: "2026-10-26",
-    infoUrl: "https://nzhistory.govt.nz/page/labour-day-0",
-    theme: {
-      emoji: "🇳🇿",
-    },
-  },
-  {
-    name: "Christmas Day",
-    date: "2026-12-25",
-    infoUrl: "https://nzhistory.govt.nz/culture/kiwi-christmas",
-    theme: {
-      backgroundClassName: "bg-[#0f1a0f]",
-      backgroundStyle: {
-        backgroundImage:
-          "radial-gradient(circle at 50% 20%, rgba(220,38,38,0.28) 0%, rgba(185,28,28,0.14) 25%, rgba(15,26,15,0.96) 65%, rgba(15,26,15,1) 100%)",
-      },
-      overlays: (
-        <>
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_15%,rgba(220,38,38,0.18)_0%,transparent_50%),radial-gradient(circle_at_70%_10%,rgba(34,197,94,0.14)_0%,transparent_45%),radial-gradient(circle_at_50%_80%,rgba(220,38,38,0.1)_0%,transparent_50%)]" />
-        </>
-      ),
-      titleClassName:
-        "text-red-400 drop-shadow-[0_12px_30px_rgba(220,38,38,0.45)]",
-      emoji: "🎅",
-    },
-  },
-];
-
 
 const getCountdownParts = (date: string, now: number): CountdownParts => {
   const diff = Math.max(0, getTime(date) - now);
@@ -154,26 +101,15 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
     return () => clearInterval(interval);
   }, [simulatedNow]);
 
-  const holidays = useMemo(() => {
-    return [...holidaysMetadata].sort((a, b) => a.date.localeCompare(b.date));
-  }, []);
-
-  const closestUpcomingHolidayIndex = getClosestUpcomingHolidayIndex(holidaysMetadata, now);
-
-  const orderedHolidays =
-    closestUpcomingHolidayIndex <= 0
-      ? holidays
-      : [
-          ...holidays.slice(closestUpcomingHolidayIndex),
-          ...holidays.slice(0, closestUpcomingHolidayIndex),
-        ];
-
-  const nextHoliday = holidaysMetadata[closestUpcomingHolidayIndex];
+  const closestUpcomingHolidayIndex = getClosestUpcomingHolidayIndex(holidays, now);
+  
+  const nextHoliday = holidays[closestUpcomingHolidayIndex];
   const nextHolidayCountdown = getCountdownParts(nextHoliday.date, now);
   const nextHolidayCountdownValues = formatCountdownValues(nextHolidayCountdown);
   const nextHolidayInfoUrl = nextHoliday.infoUrl;
   const theme = { ...defaultTheme, ...nextHoliday.theme };
-  const supportingHolidays = orderedHolidays.slice(1);
+
+  const upcomingHolidays = getHolidaysAfterDate(nextHoliday.date, holidays);
 
 
   return (
@@ -247,7 +183,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
           </div>
         </div>
 
-        {supportingHolidays.length > 0 ? (
+        {upcomingHolidays.length > 0 ? (
           <section className="mx-auto mt-10 w-full max-w-5xl pb-8 sm:mt-14">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <h3 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
@@ -259,7 +195,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
             </div>
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
-              {supportingHolidays.map((holiday) => {
+              {upcomingHolidays.map((holiday) => {
                 const countdown = getCountdownParts(holiday.date, now);
 
                 return (
