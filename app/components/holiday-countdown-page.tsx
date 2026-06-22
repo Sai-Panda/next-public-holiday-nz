@@ -249,7 +249,7 @@ export default function HolidayCountdownPage() {
                   className="font-mono text-4xl font-bold leading-none tracking-[0.12em] text-white tabular-nums drop-shadow-[0_8px_25px_rgba(255,255,255,0.12)] sm:text-6xl"
                   style={{ gridColumn: index * 2 + 1, gridRow: 1 }}
                 >
-                  <span className="inline-block min-w-[2ch] text-center">
+                  <span className="inline-block min-w-[2ch] text-center" suppressHydrationWarning>
                     {value}
                   </span>
                 </p>
@@ -308,7 +308,7 @@ export default function HolidayCountdownPage() {
                         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-black">
                           Countdown
                         </p>
-                        <p className="mt-1 font-mono text-2xl font-bold text-black">
+                        <p className="mt-1 font-mono text-2xl font-bold text-black" suppressHydrationWarning>
                           {formatCountdownValues(countdown).join(":")}
                         </p>
                       </div>
