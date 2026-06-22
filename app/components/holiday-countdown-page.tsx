@@ -31,9 +31,6 @@ type CountdownParts = {
   done: boolean;
 };
 
-type HolidayCountdownPageProps = {
-  previewNextHolidayName?: string;
-};
 
 const countdownLegend = ["Days", "Hours", "Minutes", "Seconds"] as const;
 
@@ -158,9 +155,6 @@ const formatCountdownValues = (parts: CountdownParts) => {
   ];
 };
 
-const normalizeHolidayName = (value: string) =>
-  value.trim().toLocaleLowerCase("en-NZ");
-
 const getClosestUpcomingHolidayIndex = (holidays: Holiday[], now: number) => {
   let closestIndex = -1;
   let closestDiff = Number.POSITIVE_INFINITY;
@@ -176,9 +170,7 @@ const getClosestUpcomingHolidayIndex = (holidays: Holiday[], now: number) => {
   return closestIndex;
 };
 
-export default function HolidayCountdownPage({
-  previewNextHolidayName,
-}: HolidayCountdownPageProps) {
+export default function HolidayCountdownPage() {
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -190,34 +182,12 @@ export default function HolidayCountdownPage({
   }, []);
 
   const holidays = useMemo(() => {
-    const sorted = [...holidaysMetadata].sort((a, b) =>
-      a.date.localeCompare(b.date),
-    );
-
-    if (!previewNextHolidayName) {
-      return sorted;
-    }
-
-    const selectedIndex = sorted.findIndex(
-      (holiday) =>
-        normalizeHolidayName(holiday.name) ===
-        normalizeHolidayName(previewNextHolidayName),
-    );
-
-    if (selectedIndex <= 0) {
-      return sorted;
-    }
-
-    return [
-      sorted[selectedIndex],
-      ...sorted.filter((_, index) => index !== selectedIndex),
-    ];
-  }, [previewNextHolidayName]);
+    return [...holidaysMetadata].sort((a, b) => a.date.localeCompare(b.date));
+  }, []);
 
   const upcomingHolidayIndex = getClosestUpcomingHolidayIndex(holidays, now);
-  const orderedHolidays = previewNextHolidayName
-    ? holidays
-    : upcomingHolidayIndex <= 0
+  const orderedHolidays =
+    upcomingHolidayIndex <= 0
       ? holidays
       : [
           ...holidays.slice(upcomingHolidayIndex),
@@ -279,7 +249,7 @@ export default function HolidayCountdownPage({
                   className="font-mono text-4xl font-bold leading-none tracking-[0.12em] text-white tabular-nums drop-shadow-[0_8px_25px_rgba(255,255,255,0.12)] sm:text-6xl"
                   style={{ gridColumn: index * 2 + 1, gridRow: 1 }}
                 >
-                  <span className="inline-block min-w-[2ch] text-center">
+                  <span className="inline-block min-w-[2ch] text-center" suppressHydrationWarning>
                     {value}
                   </span>
                 </p>
@@ -338,7 +308,7 @@ export default function HolidayCountdownPage({
                         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-black">
                           Countdown
                         </p>
-                        <p className="mt-1 font-mono text-2xl font-bold text-black">
+                        <p className="mt-1 font-mono text-2xl font-bold text-black" suppressHydrationWarning>
                           {formatCountdownValues(countdown).join(":")}
                         </p>
                       </div>
