@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { HolidayTheme, Holiday } from "../types/holiday";
-import { getClosestUpcomingHolidayIndex, getTargetTime } from "../util/holiday.util";
+import { getClosestUpcomingHolidayIndex, getTime } from "../util/holiday.util";
 
 type CountdownParts = {
   days: number;
@@ -71,7 +71,7 @@ const holidaysMetadata: Holiday[] = [
 
 
 const getCountdownParts = (date: string, now: number): CountdownParts => {
-  const diff = Math.max(0, getTargetTime(date) - now);
+  const diff = Math.max(0, getTime(date) - now);
 
   return {
     days: Math.floor(diff / (1000 * 60 * 60 * 24)),
@@ -158,21 +158,23 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
     return [...holidaysMetadata].sort((a, b) => a.date.localeCompare(b.date));
   }, []);
 
-  const upcomingHolidayIndex = getClosestUpcomingHolidayIndex(holidays, now);
+  const closestUpcomingHolidayIndex = getClosestUpcomingHolidayIndex(holidaysMetadata, now);
+
   const orderedHolidays =
-    upcomingHolidayIndex <= 0
+    closestUpcomingHolidayIndex <= 0
       ? holidays
       : [
-          ...holidays.slice(upcomingHolidayIndex),
-          ...holidays.slice(0, upcomingHolidayIndex),
+          ...holidays.slice(closestUpcomingHolidayIndex),
+          ...holidays.slice(0, closestUpcomingHolidayIndex),
         ];
 
-  const nextHoliday = orderedHolidays[0];
+  const nextHoliday = holidaysMetadata[closestUpcomingHolidayIndex];
   const nextHolidayCountdown = getCountdownParts(nextHoliday.date, now);
   const nextHolidayCountdownValues = formatCountdownValues(nextHolidayCountdown);
   const nextHolidayInfoUrl = nextHoliday.infoUrl;
   const theme = { ...defaultTheme, ...nextHoliday.theme };
   const supportingHolidays = orderedHolidays.slice(1);
+
 
   return (
     <main
