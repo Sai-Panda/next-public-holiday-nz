@@ -5,7 +5,10 @@ const nzOffsetFormatter = new Intl.DateTimeFormat("en-NZ", {
   timeZoneName: "shortOffset",
 });
 
+// Returns Pacific/Auckland UTC offset in minutes for a specific timestamp.
+// Example outputs from Intl can be "GMT+12" (NZST) or "GMT+13" (NZDT).
 const getNzOffsetMinutes = (timestamp: number) => {
+  // Ask Intl for timezone parts and extract only the offset-like timezone name part.
   const timeZoneName = nzOffsetFormatter
     .formatToParts(new Date(timestamp))
     .find((part) => part.type === "timeZoneName")?.value;
@@ -14,12 +17,14 @@ const getNzOffsetMinutes = (timestamp: number) => {
     throw new Error("Failed to resolve Pacific/Auckland offset");
   }
 
+  // Parse strings like "GMT+12" or "GMT+13:00" into sign/hours/minutes.
   const match = /^GMT([+-])(\d{1,2})(?::(\d{2}))?$/.exec(timeZoneName);
 
   if (!match) {
     throw new Error(`Unexpected Pacific/Auckland offset format: ${timeZoneName}`);
   }
 
+  // Convert parsed pieces into total signed minutes.
   const sign = match[1] === "-" ? -1 : 1;
   const hours = Number(match[2]);
   const minutes = Number(match[3] ?? "0");
