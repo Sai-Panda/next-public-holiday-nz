@@ -44,16 +44,12 @@ export const holidays: Holiday[] = [
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_76%_28%,rgba(255,255,255,0.95)_0,rgba(255,255,255,0.42)_5px,transparent_18px),radial-gradient(circle_at_72%_32%,rgba(255,255,255,0.85)_0,rgba(255,255,255,0.2)_4px,transparent_14px),radial-gradient(circle_at_80%_38%,rgba(255,255,255,0.7)_0,rgba(255,255,255,0.16)_3px,transparent_12px)] opacity-70" />
         </>
       ),
-      emoji: "🌌",
     },
   },
   {
     name: "Labour Day",
     dates: ["2026-10-26", "2027-10-25", "2028-10-23"],
     infoUrl: "https://nzhistory.govt.nz/page/labour-day-0",
-    theme: {
-      emoji: "🇳🇿",
-    },
   },
   {
     name: "Christmas Day",
@@ -72,7 +68,6 @@ export const holidays: Holiday[] = [
       ),
       titleClassName:
         "text-red-400 drop-shadow-[0_12px_30px_rgba(220,38,38,0.45)]",
-      emoji: "🎅",
     },
   },
   {

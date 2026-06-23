@@ -42,7 +42,6 @@ const formatHolidayName = (
   size: "large" | "small" = "large",
 ) => {
   const icon = holiday.theme?.icon;
-  const emoji = holiday.theme?.emoji;
 
   if (icon) {
     const sizeClass =
@@ -64,7 +63,7 @@ const formatHolidayName = (
     );
   }
 
-  return emoji ? `${holiday.name} ${emoji}` : holiday.name;
+  return holiday.name;
 };
 
 const formatCountdownValues = (parts: CountdownParts) => {
@@ -145,7 +144,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
         <div className="mx-auto mt-8 w-full max-w-5xl px-2 sm:mt-12 sm:px-6 lg:px-12">
           <div className="text-center">
             <h2
-              className={`mt-3 text-balance text-6xl font-black tracking-tight sm:text-8xl lg:text-[8.5rem] ${theme.titleClassName ?? "text-cyan-300 drop-shadow-[0_12px_30px_rgba(34,211,238,0.35)]"}`}
+              className={`mt-3 text-balance text-8xl font-black tracking-tight sm:text-10xl lg:text-[8.5rem] ${theme.titleClassName ?? "text-cyan-300 drop-shadow-[0_12px_30px_rgba(34,211,238,0.35)]"}`}
             >
               {formatHolidayName(nextHoliday)}
             </h2>
@@ -200,8 +199,8 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
         {upcomingHolidays.length > 0 ? (
           <section className="mx-auto mt-10 w-full max-w-5xl pb-8 sm:mt-14">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-              <h3 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
-                Upcoming NZ Public Holidays
+              <h3 className="text-center text-3xl font-black tracking-tight text-white sm:text-left sm:text-4xl">
+                Upcoming NZ National Public Holidays
               </h3>
             </div>
 

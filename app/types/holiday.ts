@@ -9,7 +9,6 @@ export type HolidayTheme = {
   backgroundClassName?: string;
   backgroundStyle?: React.CSSProperties;
   overlays?: React.ReactNode;
-  emoji?: string;
   titleClassName?: string;
   titleDropShadow?: string;
   icon?: {
