@@ -2,8 +2,36 @@ import { Holiday } from "../types/holiday";
 
 export const holidays: Holiday[] = [
   {
+    name: "New Year's Day",
+    dates: ["2026-01-01", "2027-01-01", "2028-01-03"],
+  },
+  {
+    name: "Day after New Year's Day",
+    dates: ["2026-01-02", "2027-01-04", "2028-01-04"],
+  },
+  {
+    name: "Waitangi Day",
+    dates: ["2026-02-06", "2027-02-08", "2028-02-07"],
+  },
+  {
+    name: "Good Friday",
+    dates: ["2026-04-03", "2027-03-26", "2028-04-14"],
+  },
+  {
+    name: "Easter Monday",
+    dates: ["2026-04-06", "2027-03-29", "2028-04-17"],
+  },
+  {
+    name: "ANZAC Day",
+    dates: ["2026-04-27", "2027-04-26", "2028-04-25"],
+  },
+  {
+    name: "King's Birthday",
+    dates: ["2026-06-01", "2027-06-07", "2028-06-05"],
+  },
+  {
     name: "Matariki",
-    date: "2026-07-10",
+    dates: ["2026-07-10", "2027-06-25", "2028-07-14"],
     infoUrl: "https://www.matariki.com/about",
     theme: {
       backgroundClassName: "bg-[#020617]",
@@ -21,7 +49,7 @@ export const holidays: Holiday[] = [
   },
   {
     name: "Labour Day",
-    date: "2026-10-26",
+    dates: ["2026-10-26", "2027-10-25", "2028-10-23"],
     infoUrl: "https://nzhistory.govt.nz/page/labour-day-0",
     theme: {
       emoji: "🇳🇿",
@@ -29,7 +57,7 @@ export const holidays: Holiday[] = [
   },
   {
     name: "Christmas Day",
-    date: "2026-12-25",
+    dates: ["2026-12-25", "2027-12-27", "2028-12-25"],
     infoUrl: "https://nzhistory.govt.nz/culture/kiwi-christmas",
     theme: {
       backgroundClassName: "bg-[#0f1a0f]",
@@ -46,5 +74,9 @@ export const holidays: Holiday[] = [
         "text-red-400 drop-shadow-[0_12px_30px_rgba(220,38,38,0.45)]",
       emoji: "🎅",
     },
+  },
+  {
+    name: "Boxing Day",
+    dates: ["2026-12-28", "2027-12-28", "2028-12-26"],
   },
 ];

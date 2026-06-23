@@ -1,6 +1,6 @@
 export type Holiday = {
   name: string;
-  date: string;
+  dates: string[];
   infoUrl?: string;
   theme?: HolidayTheme;
 };

@@ -4,9 +4,8 @@ import { Fragment, useEffect, useState } from "react";
 import Image from "next/image";
 import { HolidayTheme, Holiday, CountdownParts } from "../types/holiday";
 import {
-  getClosestUpcomingHolidayIndex,
-  getHolidaysAfterDate,
   getTime,
+  getUpcomingHolidayOccurrences,
 } from "../util/holiday.util";
 import { holidays } from "../types/holidays";
 
@@ -101,16 +100,31 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
     return () => clearInterval(interval);
   }, [simulatedNow]);
 
-  const closestUpcomingHolidayIndex = getClosestUpcomingHolidayIndex(holidays, now);
-  
-  const nextHoliday = holidays[closestUpcomingHolidayIndex];
-  const nextHolidayCountdown = getCountdownParts(nextHoliday.date, now);
+  const upcomingHolidayOccurrences = getUpcomingHolidayOccurrences(holidays, now, 5);
+  const nextHolidayOccurrence = upcomingHolidayOccurrences[0];
+  const upcomingHolidays = upcomingHolidayOccurrences.slice(1, 5);
+
+  if (!nextHolidayOccurrence) {
+    return (
+      <main
+        className={`relative min-h-screen overflow-hidden text-slate-950 ${defaultTheme.backgroundClassName}`}
+        style={defaultTheme.backgroundStyle}
+      >
+        <div className="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-4 py-6 text-center sm:px-6 sm:py-10 lg:px-8">
+          <p className="text-xl font-semibold text-white">
+            No upcoming NZ public holidays are loaded yet.
+          </p>
+        </div>
+      </main>
+    );
+  }
+
+  const nextHoliday = nextHolidayOccurrence.holiday;
+  const nextHolidayDate = nextHolidayOccurrence.date;
+  const nextHolidayCountdown = getCountdownParts(nextHolidayDate, now);
   const nextHolidayCountdownValues = formatCountdownValues(nextHolidayCountdown);
   const nextHolidayInfoUrl = nextHoliday.infoUrl;
   const theme = { ...defaultTheme, ...nextHoliday.theme };
-
-  const upcomingHolidays = getHolidaysAfterDate(nextHoliday.date, holidays);
-
 
   return (
     <main
@@ -136,7 +150,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
               {formatHolidayName(nextHoliday)}
             </h2>
             <p className="mt-4 text-3xl text-sky-100/90 sm:text-4xl">
-              On {formatHolidayDate(nextHoliday.date)}
+              On {formatHolidayDate(nextHolidayDate)}
             </p>
             {nextHolidayInfoUrl ? (
               <a
@@ -189,18 +203,15 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
               <h3 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
                 Upcoming NZ Public Holidays
               </h3>
-              <p className="text-sm text-sky-100/70">
-                More holidays coming up this year
-              </p>
             </div>
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
-              {upcomingHolidays.map((holiday) => {
-                const countdown = getCountdownParts(holiday.date, now);
+              {upcomingHolidays.map(({ holiday, date }) => {
+                const countdown = getCountdownParts(date, now);
 
                 return (
                   <article
-                    key={holiday.name}
+                    key={`${holiday.name}-${date}`}
                     className="rounded-3xl border border-slate-200/80 bg-white/95 p-5 shadow-[0_18px_50px_-35px_rgba(15,23,42,0.35)] backdrop-blur"
                   >
                     <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-600">
@@ -212,7 +223,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
                           {formatHolidayName(holiday, "small")}
                         </h4>
                         <p className="mt-2 text-lg text-slate-900">
-                          {formatHolidayDate(holiday.date)}
+                          {formatHolidayDate(date)}
                         </p>
                       </div>
                       <div className="rounded-2xl bg-slate-100 px-4 py-3 text-right ring-1 ring-inset ring-slate-200">

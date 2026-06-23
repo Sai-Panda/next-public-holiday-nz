@@ -1,5 +1,10 @@
 import { Holiday } from "../types/holiday";
 
+export type HolidayOccurrence = {
+  holiday: Holiday;
+  date: string;
+};
+
 const nzOffsetFormatter = new Intl.DateTimeFormat("en-NZ", {
   timeZone: "Pacific/Auckland",
   timeZoneName: "shortOffset",
@@ -46,21 +51,23 @@ export const getTime = (date: string) => {
   return utcMidnight - offsetMinutes * 60 * 1000;
 };
 
-export const getClosestUpcomingHolidayIndex = (holidays: Holiday[], now: number) => {
-  let closestIndex = -1;
-  let closestDiff = Number.POSITIVE_INFINITY;
-
-  holidays.forEach((holiday, index) => {
-    const diff = getTime(holiday.date) - now;
-    if (diff > 0 && diff < closestDiff) {
-      closestDiff = diff;
-      closestIndex = index;
-    }
-  });
-
-  return closestIndex;
+export const getHolidayOccurrences = (holidays: Holiday[]) => {
+  return holidays
+    .flatMap((holiday) =>
+      holiday.dates.map((date) => ({
+        holiday,
+        date,
+      })),
+    )
+    .sort((first, second) => getTime(first.date) - getTime(second.date));
 };
 
-export const getHolidaysAfterDate = (date: string, holidays: Holiday[]) => {
-    return holidays.filter((holiday) => new Date(holiday.date) > new Date(date))
-}
+export const getUpcomingHolidayOccurrences = (
+  holidays: Holiday[],
+  now: number,
+  limit: number,
+) => {
+  return getHolidayOccurrences(holidays)
+    .filter((occurrence) => getTime(occurrence.date) > now)
+    .slice(0, limit);
+};
