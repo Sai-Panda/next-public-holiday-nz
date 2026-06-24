@@ -48,10 +48,16 @@ const formatHolidayName = (
       size === "large"
         ? "h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24"
         : "h-7 w-7 sm:h-8 sm:w-8";
+    const wrapperClass =
+      size === "large"
+        ? "inline-flex max-w-full flex-col items-center gap-2 sm:flex-row sm:gap-3"
+        : "inline-flex items-center gap-2 sm:gap-3";
 
     return (
-      <span className="inline-flex items-center gap-2 sm:gap-3">
-        {holiday.name}{" "}
+      <span className={wrapperClass}>
+        <span className={size === "large" ? "break-words" : undefined}>
+          {holiday.name}
+        </span>
         <Image
           src={icon.src}
           alt={icon.alt}
@@ -144,7 +150,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
         <div className="mx-auto mt-8 w-full max-w-5xl px-2 sm:mt-12 sm:px-6 lg:px-12">
           <div className="text-center">
             <h2
-              className={`mt-3 text-balance text-8xl font-black tracking-tight sm:text-10xl lg:text-[8.5rem] ${theme.titleClassName ?? "text-cyan-300 drop-shadow-[0_12px_30px_rgba(34,211,238,0.35)]"}`}
+              className={`mx-auto mt-3 w-full text-center text-balance text-[clamp(3.25rem,18vw,5.5rem)] font-black leading-[0.95] tracking-tight sm:text-[clamp(4.25rem,14vw,6.5rem)] lg:text-[clamp(5.5rem,10vw,7.5rem)] ${theme.titleClassName ?? "text-cyan-300 drop-shadow-[0_12px_30px_rgba(34,211,238,0.35)]"}`}
             >
               {formatHolidayName(nextHoliday)}
             </h2>
