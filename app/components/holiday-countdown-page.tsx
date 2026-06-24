@@ -153,7 +153,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
             </p>
             {nextHolidayInfoUrl ? (
               <a
-                className="mx-auto mt-5 inline-flex rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-sky-100 focus:outline-none focus:ring-2 focus:ring-white/80"
+                className="mx-auto mt-5 inline-flex rounded-full bg-white px-6 py-3 text-base font-semibold text-slate-950 transition hover:bg-sky-100 focus:outline-none focus:ring-2 focus:ring-white/80"
                 href={nextHolidayInfoUrl}
                 rel="noreferrer"
                 target="_blank"

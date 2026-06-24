@@ -12,22 +12,27 @@ export const holidays: Holiday[] = [
   {
     name: "Waitangi Day",
     dates: ["2026-02-06", "2027-02-08", "2028-02-07"],
+    infoUrl: "https://www.waitangi.org.nz/whats-on/waitangi-day"
   },
   {
     name: "Good Friday",
     dates: ["2026-04-03", "2027-03-26", "2028-04-14"],
+    infoUrl: "https://tumanako.pndiocese.org.nz/2021/03/why-would-we-call-it-good-friday/"
   },
   {
     name: "Easter Monday",
     dates: ["2026-04-06", "2027-03-29", "2028-04-17"],
+    infoUrl: "https://www.timeanddate.com/holidays/new-zealand/easter-monday"
   },
   {
     name: "ANZAC Day",
     dates: ["2026-04-27", "2027-04-26", "2028-04-25"],
+    infoUrl: "https://nzhistory.govt.nz/war/anzac-day/introduction"
   },
   {
     name: "King's Birthday",
     dates: ["2026-06-01", "2027-06-07", "2028-06-05"],
+    infoUrl: "https://my.christchurchcitylibraries.com/kings-birthday/"
   },
   {
     name: "Matariki",
@@ -73,5 +78,6 @@ export const holidays: Holiday[] = [
   {
     name: "Boxing Day",
     dates: ["2026-12-28", "2027-12-28", "2028-12-26"],
+    infoUrl: "https://www.timeanddate.com/holidays/new-zealand/boxing-day"
   },
 ];
