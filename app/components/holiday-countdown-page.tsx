@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useState } from "react";
 import Image from "next/image";
-import { HolidayTheme, Holiday, CountdownParts } from "../types/holiday";
+import { Holiday, CountdownParts } from "../types/holiday";
 import {
   getTime,
   getUpcomingHolidayOccurrences,
@@ -11,10 +11,19 @@ import { holidays } from "../types/holidays";
 
 const countdownLegend = ["Days", "Hours", "Minutes", "Seconds"] as const;
 
-const defaultTheme: HolidayTheme = {
-  backgroundClassName:
-    "bg-[radial-gradient(circle_at_top,_#1d4ed8_0,_#1e3a8a_40%,_#172554_100%)]",
-};
+const NzFlagBackground = () => (
+  <div className="absolute inset-0 -z-10">
+    <Image
+      src="/nz_flag.svg"
+      alt=""
+      fill
+      className="object-cover"
+      priority
+    />
+    <div className="absolute inset-0 backdrop-blur-[5px]" />
+    <div className="absolute inset-0 bg-blue-950/55" />
+  </div>
+);
 
 const getCountdownParts = (date: string, now: number): CountdownParts => {
   const diff = Math.max(0, getTime(date) - now);
@@ -111,10 +120,8 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
 
   if (!nextHolidayOccurrence) {
     return (
-      <main
-        className={`relative min-h-screen overflow-hidden text-slate-950 ${defaultTheme.backgroundClassName}`}
-        style={defaultTheme.backgroundStyle}
-      >
+      <main className="relative min-h-screen overflow-hidden text-slate-950">
+        <NzFlagBackground />
         <div className="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-4 py-6 text-center sm:px-6 sm:py-10 lg:px-8">
           <p className="text-xl font-semibold text-white">
             No upcoming NZ public holidays are loaded yet.
@@ -129,14 +136,10 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
   const nextHolidayCountdown = getCountdownParts(nextHolidayDate, now);
   const nextHolidayCountdownValues = formatCountdownValues(nextHolidayCountdown);
   const nextHolidayInfoUrl = nextHoliday.infoUrl;
-  const theme = { ...defaultTheme, ...nextHoliday.theme };
 
   return (
-    <main
-      className={`relative min-h-screen overflow-hidden text-slate-950 ${theme.backgroundClassName}`}
-      style={theme.backgroundStyle}
-    >
-      {theme.overlays}
+    <main className="relative min-h-screen overflow-hidden text-slate-950">
+      <NzFlagBackground />
       <div className="mx-auto flex w-full max-w-6xl flex-col px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
         <header className="mx-auto max-w-5xl pt-6 text-center sm:pt-10">
           <p className="text-sm font-semibold uppercase tracking-[0.35em] text-sky-200/90">
@@ -150,7 +153,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
         <div className="mx-auto mt-8 w-full max-w-5xl px-2 sm:mt-12 sm:px-6 lg:px-12">
           <div className="text-center">
             <h2
-              className={`mx-auto mt-3 w-full text-center text-balance text-[clamp(3.25rem,18vw,5.5rem)] font-black leading-[0.95] tracking-tight sm:text-[clamp(4.25rem,14vw,6.5rem)] lg:text-[clamp(5.5rem,10vw,7.5rem)] ${theme.titleClassName ?? "text-cyan-300 drop-shadow-[0_12px_30px_rgba(34,211,238,0.35)]"}`}
+              className="mx-auto mt-3 w-full text-white text-center text-balance text-[clamp(3.25rem,18vw,5.5rem)] font-black leading-[0.95] tracking-tight sm:text-[clamp(4.25rem,14vw,6.5rem)] lg:text-[clamp(5.5rem,10vw,7.5rem)]"
             >
               {formatHolidayName(nextHoliday)}
             </h2>
