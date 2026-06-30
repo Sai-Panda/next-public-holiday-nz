@@ -8,7 +8,7 @@ import {
   getUpcomingHolidayOccurrences,
 } from "../util/holiday.util";
 import { holidays } from "../types/holidays";
-import bgImage from '../../public/queenstown.jpg'
+import bgImage from '../../public/harbourbridge.jpg'
 
 const countdownLegend = ["Days", "Hours", "Minutes", "Seconds"] as const;
 
@@ -139,17 +139,20 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
   const nextHolidayInfoUrl = nextHoliday.infoUrl;
 
   return (
-    <main className="relative h-screen overflow-hidden text-slate-950">
+    <main className="relative h-screen overflow-hidden text-slate-950 font-bold">
       <div className="relative h-3/5 w-full">
         <Image
           src={bgImage}
-          alt="Background placeholder"
+          alt="Background Image"
           placeholder="blur"
           quality={80}
           fill
-          priority
-          className="object-cover"
+          className="object-cover z-10"
         />
+        <div className="text-3xl p-4 w-6/7 text-white relative z-10 top-1/6"> 
+          Next NZ National Public Holiday
+        </div>
+ 
       </div>
     </main>
   );
