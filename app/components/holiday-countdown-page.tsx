@@ -91,7 +91,7 @@ const formatCountdownValues = (parts: CountdownParts) => {
 
   const pad = (value: number) => String(value).padStart(2, "0");
   return [
-    String(parts.days),
+    pad(parts.days),
     pad(parts.hours),
     pad(parts.minutes),
     pad(parts.seconds),
@@ -101,6 +101,21 @@ const formatCountdownValues = (parts: CountdownParts) => {
 type HolidayCountdownPageProps = {
   simulatedNow?: number;
 };
+
+const getReadableDate = (dateString: string) => {
+  const date: Date = new Date(dateString);
+
+  const options: Intl.DateTimeFormatOptions = { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  };
+
+  const readableDate: string = date.toLocaleDateString("en-US", options);
+
+  return readableDate.replace(/,(?=[^,]*$)/, "");
+}
 
 export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownPageProps = {}) {
   const [now, setNow] = useState(() => simulatedNow ?? Date.now());
@@ -141,7 +156,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
   const nextHolidayInfoUrl = nextHoliday.infoUrl;
 
   return (
-    <main className="relative h-screen overflow-hidden text-slate-950 font-bold">
+    <main className="relative h-screen overflow-hidden text-slate-950">
       <div className="relative h-3/5 w-full">
         <Image
           src={bgImage}
@@ -151,20 +166,42 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
           fill
           className="object-cover z-10"
         />
-        <div className="p-4 relative z-10 text-white top-1/10">
+        <div className="p-4 relative z-10 text-white top-1/10 font-bold">
           <div className="text-xl w-6/7"> 
             Next NZ National Public Holiday
           </div>
 
-          <div className="text-5xl my-3"> 
-            {nextHoliday.name}
-          </div>
+          {/* Why is there a gap next to the M */}
+          <div className="text-6xl my-3">{nextHoliday.name}</div> 
 
           <div className="flex flex-row items-center">
-            <CalendarDaysIcon className="size-7"/> 
-            <div className="ml-2">
-              {nextHolidayDate}
+            <CalendarDaysIcon className="size-7"/>
+            <div className="ml-2 font-normal">
+              {getReadableDate(nextHolidayDate)}
             </div>
+          </div>
+
+          <div className="mt-2"> 
+            Countdown
+          </div>
+
+          <div className="mt-3 flex items-center gap-2">
+            {[
+              { value: nextHolidayCountdownValues[0], label: "DAYS" },
+              { value: nextHolidayCountdownValues[1], label: "HOURS" },
+              { value: nextHolidayCountdownValues[2], label: "MINUTES" },
+              { value: nextHolidayCountdownValues[3], label: "SECONDS" },
+            ].map((unit, i) => (
+              <Fragment key={unit.label}>
+                {i > 0 && (
+                  <span className="text-3xl font-bold text-white pb-5">:</span>
+                )}
+                <div className="flex flex-col items-center bg-black/40 rounded-md px-2 py-2">
+                  <span className="text-4xl font-bold text-white leading-none">{unit.value}</span>
+                  <span className="text-[0.6rem] font-semibold text-gray-300 mt-1 tracking-widest">{unit.label}</span>
+                </div>
+              </Fragment>
+            ))}
           </div>
         </div>
       </div>
