@@ -9,6 +9,8 @@ import {
 } from "../util/holiday.util";
 import { holidays } from "../types/holidays";
 import bgImage from '../../public/harbourbridge.jpg'
+import { CalendarDaysIcon } from '@heroicons/react/24/solid'
+
 
 const countdownLegend = ["Days", "Hours", "Minutes", "Seconds"] as const;
 
@@ -149,10 +151,22 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
           fill
           className="object-cover z-10"
         />
-        <div className="text-3xl p-4 w-6/7 text-white relative z-10 top-1/6"> 
-          Next NZ National Public Holiday
+        <div className="p-4 relative z-10 text-white top-1/10">
+          <div className="text-xl w-6/7"> 
+            Next NZ National Public Holiday
+          </div>
+
+          <div className="text-5xl my-3"> 
+            {nextHoliday.name}
+          </div>
+
+          <div className="flex flex-row items-center">
+            <CalendarDaysIcon className="size-7"/> 
+            <div className="ml-2">
+              {nextHolidayDate}
+            </div>
+          </div>
         </div>
- 
       </div>
     </main>
   );
