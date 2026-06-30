@@ -10,6 +10,7 @@ import {
 import { holidays } from "../types/holidays";
 import bgImage from '../../public/harbourbridge.jpg'
 import { CalendarDaysIcon } from '@heroicons/react/24/solid'
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 
 
 const countdownLegend = ["Days", "Hours", "Minutes", "Seconds"] as const;
@@ -202,6 +203,18 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
                 </div>
               </Fragment>
             ))}
+          </div>
+
+          <div>
+            <a 
+              href={nextHoliday.infoUrl}
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <button className="bg-white text-black mt-5 px-4 py-2 rounded flex">
+                Learn more about {nextHoliday.name} <ArrowTopRightOnSquareIcon className="size-5 ml-1"/>
+              </button>
+            </a>
           </div>
         </div>
       </div>
