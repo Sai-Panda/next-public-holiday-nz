@@ -3,6 +3,7 @@ export type Holiday = {
   dates: string[];
   infoUrl?: string;
   theme?: HolidayTheme;
+  emoji?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 };
 
 export type HolidayTheme = {

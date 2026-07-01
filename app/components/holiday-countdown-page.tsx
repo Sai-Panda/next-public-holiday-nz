@@ -11,7 +11,7 @@ import { holidays } from "../types/holidays";
 import bgImage from '../../public/mountains_sheep.jpg'
 import { CalendarDaysIcon } from '@heroicons/react/24/solid'
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
-
+import { WrenchScrewdriverIcon } from "@heroicons/react/24/solid";
 
 const countdownLegend = ["Days", "Hours", "Minutes", "Seconds"] as const;
 
@@ -106,11 +106,11 @@ type HolidayCountdownPageProps = {
 const getReadableDate = (dateString: string) => {
   const date: Date = new Date(dateString);
 
-  const options: Intl.DateTimeFormatOptions = { 
-    weekday: 'long', 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
   };
 
   const readableDate: string = date.toLocaleDateString("en-US", options);
@@ -157,7 +157,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
   const nextHolidayInfoUrl = nextHoliday.infoUrl;
 
   return (
-    <main className="relative h-screen overflow-hidden text-slate-950 flex flex-col h-screen">
+    <main className="relative h-screen overflow-hidden text-slate-950 flex flex-col">
       <div className="relative h-3/5 w-full">
         <Image
           src={bgImage}
@@ -165,24 +165,24 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
           placeholder="blur"
           quality={80}
           fill
-          className="object-cover z-10"
+          className="object-cover z-10 h-full"
         />
-        <div className="p-4 relative z-10 text-white font-bold">
-          <div className="text-xl w-6/7"> 
+        <div className="p-4 absolute z-10 text-white font-bold inset-0">
+          <div className="text-xl w-6/7">
             Next NZ National Public Holiday
           </div>
 
           {/* Why is there a gap next to the M */}
-          <div className="text-6xl my-3">{nextHoliday.name}</div> 
+          <div className="text-6xl my-3">{nextHoliday.name}</div>
 
           <div className="flex flex-row items-center">
-            <CalendarDaysIcon className="size-7"/>
+            <CalendarDaysIcon className="size-7" />
             <div className="ml-2 font-normal">
               {getReadableDate(nextHolidayDate)}
             </div>
           </div>
 
-          <div className="mt-2"> 
+          <div className="mt-2">
             Countdown
           </div>
 
@@ -206,21 +206,67 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
           </div>
 
           <div>
-            <a 
+            <a
               href={nextHoliday.infoUrl}
-              target="_blank" 
+              target="_blank"
               rel="noopener noreferrer"
             >
               <button className="bg-blue-600 text-white mt-5 px-4 py-2 rounded flex">
-                Learn more about {nextHoliday.name} <ArrowTopRightOnSquareIcon className="size-5 ml-1"/>
+                Learn more about {nextHoliday.name} <ArrowTopRightOnSquareIcon className="size-5 ml-1" />
               </button>
             </a>
           </div>
         </div>
+      </div>
 
-                  
-        <div className="relative grow bg-blue-600"> 
-          sdf.kdfsklsjdfljsd
+      <div className="p-4 text-white font-bold bg-slate-950 grow">
+        <div>
+          Upcoming NZ National Public Holidays
+        </div>
+
+        <div className="outline-2 rounded mt-2">
+          {
+            upcomingHolidays.map((upcomingHoliday) => {
+              const holidayData = upcomingHoliday.holiday;
+              const EmojiIcon = (holidayData.emoji);
+              const date = upcomingHoliday.date;
+              const countdown = getCountdownParts(date, now);
+              const formattedCountdown = formatCountdownValues(countdown);
+
+              return (
+                <div className="flex outline-1 p-2">
+                  <div key={holidayData.name} className="flex items-centers w-3/5">
+                    {EmojiIcon && <EmojiIcon className="size-8" />}
+
+                    <div className="ml-1.5">
+                      <div className="text-sm font-bold">
+                        {holidayData.name}
+                      </div>
+                      <div className="text-[0.65rem] font-normal">
+                        {getReadableDate(date)}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="ml-2 flex flex-col">
+                    <div className="text-[0.6rem]">
+                      Countdown
+                    </div>
+
+                    <div className="text-xs">
+                      {(() => {
+                        const [d, h, m, s] = formatCountdownValues(countdown);
+                        return countdown.done
+                          ? d
+                          : `${d}d ${h}h ${m}m ${s}s`;
+                      })()}
+                    </div>
+                  </div>
+                </div>
+
+              );
+            })
+          }
         </div>
       </div>
     </main>
