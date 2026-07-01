@@ -8,7 +8,7 @@ import {
   getUpcomingHolidayOccurrences,
 } from "../util/holiday.util";
 import { holidays } from "../types/holidays";
-import bgImage from '../../public/harbourbridge.jpg'
+import bgImage from '../../public/mountains_sheep.jpg'
 import { CalendarDaysIcon } from '@heroicons/react/24/solid'
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 
@@ -157,7 +157,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
   const nextHolidayInfoUrl = nextHoliday.infoUrl;
 
   return (
-    <main className="relative h-screen overflow-hidden text-slate-950">
+    <main className="relative h-screen overflow-hidden text-slate-950 flex flex-col h-screen">
       <div className="relative h-3/5 w-full">
         <Image
           src={bgImage}
@@ -167,7 +167,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
           fill
           className="object-cover z-10"
         />
-        <div className="p-4 relative z-10 text-white top-1/10 font-bold">
+        <div className="p-4 relative z-10 text-white font-bold">
           <div className="text-xl w-6/7"> 
             Next NZ National Public Holiday
           </div>
@@ -211,11 +211,16 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
               target="_blank" 
               rel="noopener noreferrer"
             >
-              <button className="bg-white text-black mt-5 px-4 py-2 rounded flex">
+              <button className="bg-blue-600 text-white mt-5 px-4 py-2 rounded flex">
                 Learn more about {nextHoliday.name} <ArrowTopRightOnSquareIcon className="size-5 ml-1"/>
               </button>
             </a>
           </div>
+        </div>
+
+                  
+        <div className="relative grow bg-blue-600"> 
+          sdf.kdfsklsjdfljsd
         </div>
       </div>
     </main>
