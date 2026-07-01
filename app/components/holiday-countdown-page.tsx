@@ -199,7 +199,8 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
                   <span className="text-3xl font-bold text-white pb-5">:</span>
                 )}
                 <div className="flex flex-col items-center bg-black/40 rounded-md px-2 py-2">
-                  <span className="text-4xl font-bold text-white leading-none">{unit.value}</span>
+                  {/* suppressHydrationWarning: countdown value intentionally differs between SSR and client */}
+                  <span className="text-4xl font-bold text-white leading-none" suppressHydrationWarning>{unit.value}</span>
                   <span className="text-[0.6rem] font-semibold text-gray-300 mt-1 tracking-widest">{unit.label}</span>
                 </div>
               </Fragment>
@@ -253,7 +254,8 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
                       Countdown
                     </div>
 
-                    <div className="text-xs">
+                    {/* suppressHydrationWarning: countdown value intentionally differs between SSR and client */}
+                    <div className="text-xs" suppressHydrationWarning>
                       {(() => {
                         const [d, h, m, s] = formatCountdownValues(countdown);
                         return countdown.done
