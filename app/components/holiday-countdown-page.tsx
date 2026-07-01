@@ -234,8 +234,8 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
               const countdown = getCountdownParts(date, now);
 
               return (
-                <div className="flex outline-1 p-2">
-                  <div key={holidayData.name} className="flex items-centers w-3/5">
+                <div className="flex outline-1 p-2" key={holidayData.name} >
+                  <div className="flex items-centers w-3/5">
                     {EmojiIcon && <EmojiIcon className="size-8" />}
 
                     <div className="ml-1.5">
