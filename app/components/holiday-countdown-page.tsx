@@ -159,6 +159,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
   return (
     <main className="relative h-screen overflow-hidden text-slate-950 flex flex-col">
       <div className="relative h-3/5 w-full">
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-950 to-transparent z-20 pointer-events-none" />
         <Image
           src={bgImage}
           alt="Background Image"
@@ -167,7 +168,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
           fill
           className="object-cover z-10 h-full"
         />
-        <div className="p-4 absolute z-10 text-white font-bold inset-0">
+        <div className="p-4 absolute z-10 text-white font-bold inset-0 mt-5">
           <div className="text-xl w-6/7">
             Next NZ National Public Holiday
           </div>
@@ -231,7 +232,6 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
               const EmojiIcon = (holidayData.emoji);
               const date = upcomingHoliday.date;
               const countdown = getCountdownParts(date, now);
-              const formattedCountdown = formatCountdownValues(countdown);
 
               return (
                 <div className="flex outline-1 p-2">
