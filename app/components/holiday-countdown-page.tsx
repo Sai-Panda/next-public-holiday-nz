@@ -208,15 +208,16 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
           </div>
 
           <div>
-            <a
-              href={nextHoliday.infoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <button className="bg-blue-600 text-white mt-5 px-4 py-2 rounded flex">
+            <button className="bg-blue-600 text-white mt-5 px-4 py-2 rounded flex">
+              <a
+                href={nextHoliday.infoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex"
+              >
                 Learn more about {nextHoliday.name} <ArrowTopRightOnSquareIcon className="size-5 ml-1" />
-              </button>
-            </a>
+              </a>
+            </button>
           </div>
         </div>
       </div>
