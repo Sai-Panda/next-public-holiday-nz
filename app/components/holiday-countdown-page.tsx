@@ -157,9 +157,12 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
   const nextHolidayInfoUrl = nextHoliday.infoUrl;
 
   return (
-    <main className="relative h-screen overflow-hidden text-slate-950 flex flex-col">
+    <main className="relative h-screen overflow-hidden text-slate-950 flex flex-col bg-slate-950">
+      {/* Gradient is a sibling of both sections so it isn't clipped at the 60% boundary.
+          bottom uses calc to bleed a few px past the boundary, covering any sub-pixel rounding. */}
+      <div className="absolute bottom-[calc(40%-8px)] left-0 right-0 h-24 bg-gradient-to-t from-slate-950 to-transparent z-20 pointer-events-none" />
+
       <div className="relative h-3/5 w-full">
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-950 to-transparent z-20 pointer-events-none" />
         <Image
           src={bgImage}
           alt="Background Image"
