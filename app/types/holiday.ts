@@ -12,6 +12,10 @@ export type HolidayTheme = {
   overlays?: React.ReactNode;
   titleClassName?: string;
   titleDropShadow?: string;
+  // Signature color (hex) for lightweight per-holiday accents, e.g. the
+  // upcoming-holidays list row. Every tint/shade is derived from this one
+  // value via CSS color-mix so a new holiday only needs to set this.
+  accentColor?: string;
   icon?: {
     src: string;
     alt: string;

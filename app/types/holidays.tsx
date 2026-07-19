@@ -77,6 +77,11 @@ export const holidays: Holiday[] = [
     dates: ["2026-10-26", "2027-10-25", "2028-10-23"],
     infoUrl: "https://nzhistory.govt.nz/page/labour-day-0",
     emoji: WrenchScrewdriverIcon,
+    theme: {
+      // Copper/amber: echoes the dirt-track and evening-light tones in the
+      // hero photo, and pairs with the wrench icon (tools, trade).
+      accentColor: "#f59e0b",
+    },
   },
   {
     name: "Christmas Day",

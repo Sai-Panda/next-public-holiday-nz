@@ -189,36 +189,78 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
           Upcoming NZ National Public Holidays
         </div>
 
-        <div className="outline-2 rounded mt-2">
+        <div className="mt-3 flex flex-col gap-2.5">
           {
             upcomingHolidays.map((upcomingHoliday) => {
               const holidayData = upcomingHoliday.holiday;
               const EmojiIcon = (holidayData.emoji);
               const date = upcomingHoliday.date;
               const countdown = getCountdownParts(date, now);
+              // Only holidays with a theme (currently just Labour Day) get an
+              // accent glow; everything else stays in the plain glass style
+              // so it doesn't compete with the "next holiday" hero above.
+              const accent = holidayData.theme?.accentColor;
 
               return (
-                <div className="flex outline-1 p-2" key={holidayData.name} >
-                  <div className="flex items-center w-3/5">
-                    {EmojiIcon && <EmojiIcon className="size-8" />}
+                <div
+                  className="flex items-center justify-between gap-3 rounded-2xl border p-3.5"
+                  key={holidayData.name}
+                  style={
+                    accent
+                      ? {
+                          background: `linear-gradient(135deg, color-mix(in srgb, ${accent} 18%, transparent), color-mix(in srgb, ${accent} 3%, transparent))`,
+                          borderColor: `color-mix(in srgb, ${accent} 40%, transparent)`,
+                          boxShadow: `0 0 34px -8px color-mix(in srgb, ${accent} 45%, transparent)`,
+                        }
+                      : {
+                          background:
+                            "linear-gradient(135deg, rgba(255,255,255,0.055), rgba(255,255,255,0.015))",
+                          borderColor: "rgba(255,255,255,0.08)",
+                        }
+                  }
+                >
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div
+                      className="flex size-10 shrink-0 items-center justify-center rounded-full"
+                      style={
+                        accent
+                          ? {
+                              background: `radial-gradient(circle at 35% 30%, color-mix(in srgb, ${accent} 65%, white), color-mix(in srgb, ${accent} 55%, black) 70%)`,
+                              color: `color-mix(in srgb, ${accent} 20%, white)`,
+                            }
+                          : { background: "rgba(255,255,255,0.07)", color: "#e2e8f0" }
+                      }
+                    >
+                      {EmojiIcon && <EmojiIcon className="size-5" />}
+                    </div>
 
-                    <div className="ml-1.5">
-                      <div className="text-sm font-bold">
+                    <div className="min-w-0">
+                      <div
+                        className="truncate text-sm font-bold"
+                        style={accent ? { color: `color-mix(in srgb, ${accent} 35%, white)` } : undefined}
+                      >
                         {holidayData.name}
                       </div>
-                      <div className="text-[0.65rem] font-normal">
+                      <div className="text-[0.68rem] font-normal text-gray-400">
                         {getReadableDate(date)}
                       </div>
                     </div>
                   </div>
 
-                  <div className="ml-2 flex flex-col">
-                    <div className="text-[0.6rem]">
-                      Countdown
+                  <div className="shrink-0 text-right">
+                    <div
+                      className="text-[0.55rem] font-bold tracking-widest"
+                      style={{ color: accent ? `color-mix(in srgb, ${accent} 70%, white)` : "#7c8494" }}
+                    >
+                      IN
                     </div>
 
                     {/* suppressHydrationWarning: countdown value intentionally differs between SSR and client */}
-                    <div className="text-xs" suppressHydrationWarning>
+                    <div
+                      className="text-xs font-semibold"
+                      style={{ color: accent ? `color-mix(in srgb, ${accent} 35%, white)` : "#e5e7eb" }}
+                      suppressHydrationWarning
+                    >
                       {(() => {
                         const [d, h, m, s] = formatCountdownValues(countdown);
                         return countdown.done
