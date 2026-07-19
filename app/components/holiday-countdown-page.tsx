@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useState } from "react";
 import Image from "next/image";
-import { Holiday, CountdownParts } from "../types/holiday";
+import { CountdownParts } from "../types/holiday";
 import {
   getTime,
   getUpcomingHolidayOccurrences,
@@ -11,9 +11,6 @@ import { holidays } from "../types/holidays";
 import bgImage from '../../public/mountains_sheep.jpg'
 import { CalendarDaysIcon } from '@heroicons/react/24/solid'
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
-import { WrenchScrewdriverIcon } from "@heroicons/react/24/solid";
-
-const countdownLegend = ["Days", "Hours", "Minutes", "Seconds"] as const;
 
 const NzFlagBackground = () => (
   <div className="absolute inset-0 -z-10">
@@ -41,50 +38,6 @@ const getCountdownParts = (date: string, now: number): CountdownParts => {
   };
 };
 
-const formatHolidayDate = (date: string) =>
-  new Intl.DateTimeFormat("en-NZ", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    timeZone: "Pacific/Auckland",
-  }).format(new Date(date));
-
-const formatHolidayName = (
-  holiday: Holiday,
-  size: "large" | "small" = "large",
-) => {
-  const icon = holiday.theme?.icon;
-
-  if (icon) {
-    const sizeClass =
-      size === "large"
-        ? "h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24"
-        : "h-7 w-7 sm:h-8 sm:w-8";
-    const wrapperClass =
-      size === "large"
-        ? "inline-flex max-w-full flex-col items-center gap-2 sm:flex-row sm:gap-3"
-        : "inline-flex items-center gap-2 sm:gap-3";
-
-    return (
-      <span className={wrapperClass}>
-        <span className={size === "large" ? "break-words" : undefined}>
-          {holiday.name}
-        </span>
-        <Image
-          src={icon.src}
-          alt={icon.alt}
-          width={128}
-          height={128}
-          className={sizeClass}
-        />
-      </span>
-    );
-  }
-
-  return holiday.name;
-};
-
 const formatCountdownValues = (parts: CountdownParts) => {
   if (parts.done) {
     return ["Today", "Today", "Today", "Today"];
@@ -106,11 +59,15 @@ type HolidayCountdownPageProps = {
 const getReadableDate = (dateString: string) => {
   const date: Date = new Date(dateString);
 
+  // Pinned to Pacific/Auckland: these are NZ holiday dates, so they must read
+  // correctly regardless of the viewer's own timezone (otherwise a visitor
+  // west of NZ, e.g. in the Americas, sees the date rolled back by a day).
   const options: Intl.DateTimeFormatOptions = {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: 'Pacific/Auckland',
   };
 
   const readableDate: string = date.toLocaleDateString("en-US", options);
@@ -154,7 +111,6 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
   const nextHolidayDate = nextHolidayOccurrence.date;
   const nextHolidayCountdown = getCountdownParts(nextHolidayDate, now);
   const nextHolidayCountdownValues = formatCountdownValues(nextHolidayCountdown);
-  const nextHolidayInfoUrl = nextHoliday.infoUrl;
 
   return (
     <main className="relative min-h-screen text-slate-950 flex flex-col bg-slate-950">
@@ -180,7 +136,6 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
             Next NZ National Public Holiday
           </div>
 
-          {/* Why is there a gap next to the M */}
           <div className="text-6xl my-3">{nextHoliday.name}</div>
 
           <div className="flex flex-row items-center">
@@ -214,18 +169,18 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
             ))}
           </div>
 
-          <div>
-            <button className="bg-blue-600 text-white mt-5 px-4 py-2 rounded flex">
+          {nextHoliday.infoUrl ? (
+            <div>
               <a
                 href={nextHoliday.infoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex"
+                className="bg-blue-600 text-white mt-5 px-4 py-2 rounded flex items-center w-fit"
               >
                 Learn more about {nextHoliday.name} <ArrowTopRightOnSquareIcon className="size-5 ml-1" />
               </a>
-            </button>
-          </div>
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -244,7 +199,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
 
               return (
                 <div className="flex outline-1 p-2" key={holidayData.name} >
-                  <div className="flex items-centers w-3/5">
+                  <div className="flex items-center w-3/5">
                     {EmojiIcon && <EmojiIcon className="size-8" />}
 
                     <div className="ml-1.5">
