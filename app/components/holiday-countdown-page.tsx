@@ -157,21 +157,21 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
   const nextHolidayInfoUrl = nextHoliday.infoUrl;
 
   return (
-    <main className="relative h-screen overflow-hidden text-slate-950 flex flex-col bg-slate-950">
-      {/* Gradient is a sibling of both sections so it isn't clipped at the 60% boundary.
-          bottom uses calc to bleed a few px past the boundary, covering any sub-pixel rounding. */}
-      <div className="absolute bottom-[calc(40%-8px)] left-0 right-0 h-24 bg-gradient-to-t from-slate-950 to-transparent z-20 pointer-events-none" />
-
-      <div className="relative h-3/5 w-full">
+    <main className="relative min-h-screen text-slate-950 flex flex-col bg-slate-950">
+      <div className="relative h-[60vh] w-full shrink-0">
         <Image
           src={bgImage}
           alt="Background Image"
           placeholder="blur"
           quality={80}
           fill
-          className="object-cover z-10 h-full"
+          className="object-cover z-0 h-full"
         />
-        <div className="p-4 absolute z-10 text-white font-bold inset-0 mt-5">
+        {/* Fades the image to slate-950 before the upcoming-holidays section begins, so the
+            transition is smooth instead of a hard cut. Sits above the image but below the
+            text/button layer (z-20) so it never dims or blocks the CTA. */}
+        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-slate-950 to-transparent z-10 pointer-events-none" />
+        <div className="p-4 absolute z-20 text-white font-bold inset-0 mt-5">
           <div className="text-xl w-6/7">
             Next NZ National Public Holiday
           </div>
