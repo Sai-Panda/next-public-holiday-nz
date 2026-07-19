@@ -158,7 +158,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
 
   return (
     <main className="relative min-h-screen text-slate-950 flex flex-col bg-slate-950">
-      <div className="relative h-[60vh] w-full shrink-0">
+      <div className="relative min-h-[60vh] w-full shrink-0">
         <Image
           src={bgImage}
           alt="Background Image"
@@ -169,9 +169,13 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
         />
         {/* Fades the image to slate-950 before the upcoming-holidays section begins, so the
             transition is smooth instead of a hard cut. Sits above the image but below the
-            text/button layer (z-20) so it never dims or blocks the CTA. */}
-        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-slate-950 to-transparent z-10 pointer-events-none" />
-        <div className="p-4 absolute z-20 text-white font-bold inset-0 mt-5">
+            text/button layer (z-20) so it never dims or blocks the CTA. Fixed height (not a
+            % of the hero) since the hero's height is content-driven and may grow at zoom. */}
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-950 to-transparent z-10 pointer-events-none" />
+        {/* Relative (not absolute/inset-0) so this content is in normal flow and drives the
+            hero's height — if zoomed text needs more than min-h-[60vh], the hero grows and
+            pushes the section below down instead of the text overlapping it. */}
+        <div className="p-4 relative z-20 text-white font-bold mt-5">
           <div className="text-xl w-6/7">
             Next NZ National Public Holiday
           </div>
