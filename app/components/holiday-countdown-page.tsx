@@ -2,14 +2,15 @@
 
 import { Fragment, useEffect, useState } from "react";
 import Image from "next/image";
-import { Holiday, CountdownParts } from "../types/holiday";
+import { CountdownParts } from "../types/holiday";
 import {
   getTime,
   getUpcomingHolidayOccurrences,
 } from "../util/holiday.util";
 import { holidays } from "../types/holidays";
-
-const countdownLegend = ["Days", "Hours", "Minutes", "Seconds"] as const;
+import bgImage from '../../public/mountains_sheep.jpg'
+import { CalendarDaysIcon } from '@heroicons/react/24/solid'
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 
 const NzFlagBackground = () => (
   <div className="absolute inset-0 -z-10">
@@ -37,50 +38,6 @@ const getCountdownParts = (date: string, now: number): CountdownParts => {
   };
 };
 
-const formatHolidayDate = (date: string) =>
-  new Intl.DateTimeFormat("en-NZ", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    timeZone: "Pacific/Auckland",
-  }).format(new Date(date));
-
-const formatHolidayName = (
-  holiday: Holiday,
-  size: "large" | "small" = "large",
-) => {
-  const icon = holiday.theme?.icon;
-
-  if (icon) {
-    const sizeClass =
-      size === "large"
-        ? "h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24"
-        : "h-7 w-7 sm:h-8 sm:w-8";
-    const wrapperClass =
-      size === "large"
-        ? "inline-flex max-w-full flex-col items-center gap-2 sm:flex-row sm:gap-3"
-        : "inline-flex items-center gap-2 sm:gap-3";
-
-    return (
-      <span className={wrapperClass}>
-        <span className={size === "large" ? "break-words" : undefined}>
-          {holiday.name}
-        </span>
-        <Image
-          src={icon.src}
-          alt={icon.alt}
-          width={128}
-          height={128}
-          className={sizeClass}
-        />
-      </span>
-    );
-  }
-
-  return holiday.name;
-};
-
 const formatCountdownValues = (parts: CountdownParts) => {
   if (parts.done) {
     return ["Today", "Today", "Today", "Today"];
@@ -88,7 +45,7 @@ const formatCountdownValues = (parts: CountdownParts) => {
 
   const pad = (value: number) => String(value).padStart(2, "0");
   return [
-    String(parts.days),
+    pad(parts.days),
     pad(parts.hours),
     pad(parts.minutes),
     pad(parts.seconds),
@@ -98,6 +55,25 @@ const formatCountdownValues = (parts: CountdownParts) => {
 type HolidayCountdownPageProps = {
   simulatedNow?: number;
 };
+
+const getReadableDate = (dateString: string) => {
+  const date: Date = new Date(dateString);
+
+  // Pinned to Pacific/Auckland: these are NZ holiday dates, so they must read
+  // correctly regardless of the viewer's own timezone (otherwise a visitor
+  // west of NZ, e.g. in the Americas, sees the date rolled back by a day).
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'Pacific/Auckland',
+  };
+
+  const readableDate: string = date.toLocaleDateString("en-US", options);
+
+  return readableDate.replace(/,(?=[^,]*$)/, "");
+}
 
 export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownPageProps = {}) {
   const [now, setNow] = useState(() => simulatedNow ?? Date.now());
@@ -135,120 +111,128 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
   const nextHolidayDate = nextHolidayOccurrence.date;
   const nextHolidayCountdown = getCountdownParts(nextHolidayDate, now);
   const nextHolidayCountdownValues = formatCountdownValues(nextHolidayCountdown);
-  const nextHolidayInfoUrl = nextHoliday.infoUrl;
 
   return (
-    <main className="relative min-h-screen overflow-hidden text-slate-950">
-      <NzFlagBackground />
-      <div className="mx-auto flex w-full max-w-6xl flex-col px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
-        <header className="mx-auto max-w-5xl pt-6 text-center sm:pt-10">
-          <p className="text-sm font-semibold uppercase tracking-[0.35em] text-sky-200/90">
-            New Zealand National Public Holidays
-          </p>
-          <h1 className="mx-auto mt-4 max-w-[22ch] text-4xl font-black tracking-tight text-white sm:max-w-[40rem] sm:text-5xl lg:max-w-[49rem] lg:text-6xl">
-            What is the next NZ National Public Holiday?
-          </h1>
-        </header>
-
-        <div className="mx-auto mt-8 w-full max-w-5xl px-2 sm:mt-12 sm:px-6 lg:px-12">
-          <div className="text-center">
-            <h2
-              className="mx-auto mt-3 w-full text-white text-center text-balance text-[clamp(3.25rem,18vw,5.5rem)] font-black leading-[0.95] tracking-tight sm:text-[clamp(4.25rem,14vw,6.5rem)] lg:text-[clamp(5.5rem,10vw,7.5rem)]"
-            >
-              {formatHolidayName(nextHoliday)}
-            </h2>
-            <p className="mt-4 text-3xl text-sky-100/90 sm:text-4xl">
-              On {formatHolidayDate(nextHolidayDate)}
-            </p>
-            {nextHolidayInfoUrl ? (
-              <a
-                className="mx-auto mt-5 inline-flex rounded-full bg-white px-6 py-3 text-base font-semibold text-slate-950 transition hover:bg-sky-100 focus:outline-none focus:ring-2 focus:ring-white/80"
-                href={nextHolidayInfoUrl}
-                rel="noreferrer"
-                target="_blank"
-              >
-                Learn more about {nextHoliday.name}
-              </a>
-            ) : null}
+    <main className="relative min-h-screen text-slate-950 flex flex-col bg-slate-950">
+      <div className="relative min-h-[60vh] w-full shrink-0">
+        <Image
+          src={bgImage}
+          alt="Background Image"
+          placeholder="blur"
+          quality={80}
+          fill
+          className="object-cover z-0 h-full"
+        />
+        {/* Fades the image to slate-950 before the upcoming-holidays section begins, so the
+            transition is smooth instead of a hard cut. Sits above the image but below the
+            text/button layer (z-20) so it never dims or blocks the CTA. Fixed height (not a
+            % of the hero) since the hero's height is content-driven and may grow at zoom. */}
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-950 to-transparent z-10 pointer-events-none" />
+        {/* Relative (not absolute/inset-0) so this content is in normal flow and drives the
+            hero's height — if zoomed text needs more than min-h-[60vh], the hero grows and
+            pushes the section below down instead of the text overlapping it. */}
+        <div className="p-4 relative z-20 text-white font-bold mt-5">
+          <div className="text-xl w-6/7">
+            Next NZ National Public Holiday
           </div>
 
-          <div
-            className="mx-auto mt-8 grid justify-center gap-x-2 text-center sm:gap-x-4"
-            style={{ gridTemplateColumns: "repeat(7, max-content)" }}
-          >
-            {nextHolidayCountdownValues.map((value, index) => (
-              <Fragment key={countdownLegend[index]}>
-                <p
-                  className="font-mono text-4xl font-bold leading-none tracking-[0.12em] text-white tabular-nums drop-shadow-[0_8px_25px_rgba(255,255,255,0.12)] sm:text-6xl"
-                  style={{ gridColumn: index * 2 + 1, gridRow: 1 }}
-                >
-                  <span className="inline-block min-w-[2ch] text-center" suppressHydrationWarning>
-                    {value}
-                  </span>
-                </p>
-                {index < nextHolidayCountdownValues.length - 1 ? (
-                  <p
-                    className="self-center font-mono text-4xl font-bold leading-none text-sky-100/60 sm:text-6xl"
-                    style={{ gridColumn: index * 2 + 2, gridRow: 1 }}
-                  >
-                    :
-                  </p>
-                ) : null}
-                <p
-                  className="mt-3 text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-sky-100/70 sm:text-xs sm:tracking-[0.35em]"
-                  style={{ gridColumn: index * 2 + 1, gridRow: 2 }}
-                >
-                  {countdownLegend[index]}
-                </p>
+          <div className="text-6xl my-3">{nextHoliday.name}</div>
+
+          <div className="flex flex-row items-center">
+            <CalendarDaysIcon className="size-7" />
+            <div className="ml-2 font-normal">
+              {getReadableDate(nextHolidayDate)}
+            </div>
+          </div>
+
+          <div className="mt-2">
+            Countdown
+          </div>
+
+          <div className="mt-3 flex items-center gap-2">
+            {[
+              { value: nextHolidayCountdownValues[0], label: "DAYS" },
+              { value: nextHolidayCountdownValues[1], label: "HOURS" },
+              { value: nextHolidayCountdownValues[2], label: "MINUTES" },
+              { value: nextHolidayCountdownValues[3], label: "SECONDS" },
+            ].map((unit, i) => (
+              <Fragment key={unit.label}>
+                {i > 0 && (
+                  <span className="text-3xl font-bold text-white pb-5">:</span>
+                )}
+                <div className="flex flex-col items-center bg-black/40 rounded-md px-2 py-2">
+                  {/* suppressHydrationWarning: countdown value intentionally differs between SSR and client */}
+                  <span className="text-4xl font-bold text-white leading-none" suppressHydrationWarning>{unit.value}</span>
+                  <span className="text-[0.6rem] font-semibold text-gray-300 mt-1 tracking-widest">{unit.label}</span>
+                </div>
               </Fragment>
             ))}
           </div>
+
+          {nextHoliday.infoUrl ? (
+            <div>
+              <a
+                href={nextHoliday.infoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-blue-600 text-white mt-5 px-4 py-2 rounded flex items-center w-fit"
+              >
+                Learn more about {nextHoliday.name} <ArrowTopRightOnSquareIcon className="size-5 ml-1" />
+              </a>
+            </div>
+          ) : null}
+        </div>
+      </div>
+
+      <div className="p-4 text-white font-bold bg-slate-950 grow">
+        <div>
+          Upcoming NZ National Public Holidays
         </div>
 
-        {upcomingHolidays.length > 0 ? (
-          <section className="mx-auto mt-10 w-full max-w-5xl pb-8 sm:mt-14">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-              <h3 className="text-center text-3xl font-black tracking-tight text-white sm:text-left sm:text-4xl">
-                Upcoming NZ National Public Holidays
-              </h3>
-            </div>
+        <div className="outline-2 rounded mt-2">
+          {
+            upcomingHolidays.map((upcomingHoliday) => {
+              const holidayData = upcomingHoliday.holiday;
+              const EmojiIcon = (holidayData.emoji);
+              const date = upcomingHoliday.date;
+              const countdown = getCountdownParts(date, now);
 
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              {upcomingHolidays.map(({ holiday, date }) => {
-                const countdown = getCountdownParts(date, now);
+              return (
+                <div className="flex outline-1 p-2" key={holidayData.name} >
+                  <div className="flex items-center w-3/5">
+                    {EmojiIcon && <EmojiIcon className="size-8" />}
 
-                return (
-                  <article
-                    key={`${holiday.name}-${date}`}
-                    className="rounded-3xl border border-slate-200/80 bg-white/95 p-5 shadow-[0_18px_50px_-35px_rgba(15,23,42,0.35)] backdrop-blur"
-                  >
-                    <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-600">
-                      Upcoming
-                    </p>
-                    <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                      <div>
-                        <h4 className="text-3xl font-black tracking-tight text-blue-700">
-                          {formatHolidayName(holiday, "small")}
-                        </h4>
-                        <p className="mt-2 text-lg text-slate-900">
-                          {formatHolidayDate(date)}
-                        </p>
+                    <div className="ml-1.5">
+                      <div className="text-sm font-bold">
+                        {holidayData.name}
                       </div>
-                      <div className="rounded-2xl bg-slate-100 px-4 py-3 text-right ring-1 ring-inset ring-slate-200">
-                        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-black">
-                          Countdown
-                        </p>
-                        <p className="mt-1 font-mono text-2xl font-bold text-black" suppressHydrationWarning>
-                          {formatCountdownValues(countdown).join(":")}
-                        </p>
+                      <div className="text-[0.65rem] font-normal">
+                        {getReadableDate(date)}
                       </div>
                     </div>
-                  </article>
-                );
-              })}
-            </div>
-          </section>
-        ) : null}
+                  </div>
+
+                  <div className="ml-2 flex flex-col">
+                    <div className="text-[0.6rem]">
+                      Countdown
+                    </div>
+
+                    {/* suppressHydrationWarning: countdown value intentionally differs between SSR and client */}
+                    <div className="text-xs" suppressHydrationWarning>
+                      {(() => {
+                        const [d, h, m, s] = formatCountdownValues(countdown);
+                        return countdown.done
+                          ? d
+                          : `${d}d ${h}h ${m}m ${s}s`;
+                      })()}
+                    </div>
+                  </div>
+                </div>
+
+              );
+            })
+          }
+        </div>
       </div>
     </main>
   );
