@@ -291,7 +291,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
                 href={nextHoliday.infoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-blue-600 text-white mt-5 px-4 py-2 rounded flex items-center w-fit transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400 lg:mx-auto lg:mt-8 lg:px-6 lg:py-3 lg:text-lg"
+                className="bg-black/70 text-white mt-5 px-4 py-2 rounded-md flex items-center w-fit transition-colors hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60 lg:mx-auto lg:mt-8 lg:px-6 lg:py-3 lg:text-lg"
               >
                 Learn more about {nextHoliday.name} <ArrowTopRightOnSquareIcon className="size-5 ml-1 lg:size-6" />
               </a>
