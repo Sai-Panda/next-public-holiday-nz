@@ -6,11 +6,19 @@ import { CountdownParts } from "../types/holiday";
 import {
   getTime,
   getUpcomingHolidayOccurrences,
+  HolidayOccurrence,
 } from "../util/holiday.util";
 import { holidays } from "../types/holidays";
 import bgImage from '../../public/mountains_sheep.jpg'
-import { CalendarDaysIcon } from '@heroicons/react/24/solid'
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
+import {
+  CalendarDaysIcon,
+  ArrowTopRightOnSquareIcon,
+  ChevronRightIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
+
+const UPCOMING_LIST_LIMIT = 4;
+const UPCOMING_OVERLAY_LIMIT = 10;
 
 const NzFlagBackground = () => (
   <div className="absolute inset-0 -z-10">
@@ -77,6 +85,7 @@ const getReadableDate = (dateString: string) => {
 
 export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownPageProps = {}) {
   const [now, setNow] = useState(() => simulatedNow ?? Date.now());
+  const [showAllHolidays, setShowAllHolidays] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -90,9 +99,34 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
     return () => clearInterval(interval);
   }, [simulatedNow]);
 
-  const upcomingHolidayOccurrences = getUpcomingHolidayOccurrences(holidays, now, 5);
+  // Lock background scroll and let Escape close the overlay while it's open.
+  useEffect(() => {
+    if (!showAllHolidays) {
+      return;
+    }
+
+    document.body.style.overflow = "hidden";
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setShowAllHolidays(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [showAllHolidays]);
+
+  const upcomingHolidayOccurrences = getUpcomingHolidayOccurrences(
+    holidays,
+    now,
+    UPCOMING_OVERLAY_LIMIT + 1,
+  );
   const nextHolidayOccurrence = upcomingHolidayOccurrences[0];
-  const upcomingHolidays = upcomingHolidayOccurrences.slice(1, 5);
+  const upcomingHolidays = upcomingHolidayOccurrences.slice(1, UPCOMING_LIST_LIMIT + 1);
+  const allUpcomingHolidays = upcomingHolidayOccurrences.slice(1);
 
   if (!nextHolidayOccurrence) {
     return (
@@ -111,6 +145,88 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
   const nextHolidayDate = nextHolidayOccurrence.date;
   const nextHolidayCountdown = getCountdownParts(nextHolidayDate, now);
   const nextHolidayCountdownValues = formatCountdownValues(nextHolidayCountdown);
+
+  const renderHolidayRow = (upcomingHoliday: HolidayOccurrence) => {
+    const holidayData = upcomingHoliday.holiday;
+    const EmojiIcon = holidayData.emoji;
+    const date = upcomingHoliday.date;
+    const countdown = getCountdownParts(date, now);
+    // Only holidays with a theme (currently just Labour Day) get an
+    // accent glow; everything else stays in the plain glass style
+    // so it doesn't compete with the "next holiday" hero above.
+    const accent = holidayData.theme?.accentColor;
+
+    return (
+      <div
+        className="flex items-center justify-between gap-3 rounded-2xl border p-3.5"
+        key={`${holidayData.name}-${date}`}
+        style={
+          accent
+            ? {
+                background: `linear-gradient(135deg, color-mix(in srgb, ${accent} 18%, transparent), color-mix(in srgb, ${accent} 3%, transparent))`,
+                borderColor: `color-mix(in srgb, ${accent} 40%, transparent)`,
+                boxShadow: `0 0 34px -8px color-mix(in srgb, ${accent} 45%, transparent)`,
+              }
+            : {
+                background:
+                  "linear-gradient(135deg, rgba(255,255,255,0.055), rgba(255,255,255,0.015))",
+                borderColor: "rgba(255,255,255,0.08)",
+              }
+        }
+      >
+        <div className="flex min-w-0 items-center gap-3">
+          <div
+            className="flex size-10 shrink-0 items-center justify-center rounded-full"
+            style={
+              accent
+                ? {
+                    background: `radial-gradient(circle at 35% 30%, color-mix(in srgb, ${accent} 65%, white), color-mix(in srgb, ${accent} 55%, black) 70%)`,
+                    color: `color-mix(in srgb, ${accent} 20%, white)`,
+                  }
+                : { background: "rgba(255,255,255,0.07)", color: "#e2e8f0" }
+            }
+          >
+            {EmojiIcon && <EmojiIcon className="size-5" />}
+          </div>
+
+          <div className="min-w-0">
+            <div
+              className="truncate text-sm font-bold text-white"
+              style={accent ? { color: `color-mix(in srgb, ${accent} 35%, white)` } : undefined}
+            >
+              {holidayData.name}
+            </div>
+            <div className="text-[0.68rem] font-normal text-gray-400">
+              {getReadableDate(date)}
+            </div>
+          </div>
+        </div>
+
+        <div className="shrink-0 text-right">
+          <div
+            className="text-[0.55rem] font-bold tracking-widest"
+            style={{ color: accent ? `color-mix(in srgb, ${accent} 70%, white)` : "#7c8494" }}
+          >
+            IN
+          </div>
+
+          {/* suppressHydrationWarning: countdown value intentionally differs between SSR and client */}
+          <div
+            className="text-xs font-semibold"
+            style={{ color: accent ? `color-mix(in srgb, ${accent} 35%, white)` : "#e5e7eb" }}
+            suppressHydrationWarning
+          >
+            {(() => {
+              const [d, h, m, s] = formatCountdownValues(countdown);
+              return countdown.done
+                ? d
+                : `${d}d ${h}h ${m}m ${s}s`;
+            })()}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <main className="relative min-h-screen text-slate-950 flex flex-col bg-slate-950">
@@ -190,92 +306,54 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
         </div>
 
         <div className="mt-3 flex flex-col gap-2.5">
-          {
-            upcomingHolidays.map((upcomingHoliday) => {
-              const holidayData = upcomingHoliday.holiday;
-              const EmojiIcon = (holidayData.emoji);
-              const date = upcomingHoliday.date;
-              const countdown = getCountdownParts(date, now);
-              // Only holidays with a theme (currently just Labour Day) get an
-              // accent glow; everything else stays in the plain glass style
-              // so it doesn't compete with the "next holiday" hero above.
-              const accent = holidayData.theme?.accentColor;
-
-              return (
-                <div
-                  className="flex items-center justify-between gap-3 rounded-2xl border p-3.5"
-                  key={holidayData.name}
-                  style={
-                    accent
-                      ? {
-                          background: `linear-gradient(135deg, color-mix(in srgb, ${accent} 18%, transparent), color-mix(in srgb, ${accent} 3%, transparent))`,
-                          borderColor: `color-mix(in srgb, ${accent} 40%, transparent)`,
-                          boxShadow: `0 0 34px -8px color-mix(in srgb, ${accent} 45%, transparent)`,
-                        }
-                      : {
-                          background:
-                            "linear-gradient(135deg, rgba(255,255,255,0.055), rgba(255,255,255,0.015))",
-                          borderColor: "rgba(255,255,255,0.08)",
-                        }
-                  }
-                >
-                  <div className="flex min-w-0 items-center gap-3">
-                    <div
-                      className="flex size-10 shrink-0 items-center justify-center rounded-full"
-                      style={
-                        accent
-                          ? {
-                              background: `radial-gradient(circle at 35% 30%, color-mix(in srgb, ${accent} 65%, white), color-mix(in srgb, ${accent} 55%, black) 70%)`,
-                              color: `color-mix(in srgb, ${accent} 20%, white)`,
-                            }
-                          : { background: "rgba(255,255,255,0.07)", color: "#e2e8f0" }
-                      }
-                    >
-                      {EmojiIcon && <EmojiIcon className="size-5" />}
-                    </div>
-
-                    <div className="min-w-0">
-                      <div
-                        className="truncate text-sm font-bold"
-                        style={accent ? { color: `color-mix(in srgb, ${accent} 35%, white)` } : undefined}
-                      >
-                        {holidayData.name}
-                      </div>
-                      <div className="text-[0.68rem] font-normal text-gray-400">
-                        {getReadableDate(date)}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="shrink-0 text-right">
-                    <div
-                      className="text-[0.55rem] font-bold tracking-widest"
-                      style={{ color: accent ? `color-mix(in srgb, ${accent} 70%, white)` : "#7c8494" }}
-                    >
-                      IN
-                    </div>
-
-                    {/* suppressHydrationWarning: countdown value intentionally differs between SSR and client */}
-                    <div
-                      className="text-xs font-semibold"
-                      style={{ color: accent ? `color-mix(in srgb, ${accent} 35%, white)` : "#e5e7eb" }}
-                      suppressHydrationWarning
-                    >
-                      {(() => {
-                        const [d, h, m, s] = formatCountdownValues(countdown);
-                        return countdown.done
-                          ? d
-                          : `${d}d ${h}h ${m}m ${s}s`;
-                      })()}
-                    </div>
-                  </div>
-                </div>
-
-              );
-            })
-          }
+          {upcomingHolidays.map(renderHolidayRow)}
         </div>
+
+        {allUpcomingHolidays.length > upcomingHolidays.length && (
+          <button
+            type="button"
+            onClick={() => setShowAllHolidays(true)}
+            className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-2xl border border-white/10 bg-white/[0.03] p-3 text-xs font-bold tracking-wide text-gray-300 active:bg-white/10"
+          >
+            Show next {allUpcomingHolidays.length} holidays
+            <ChevronRightIcon className="size-3.5" />
+          </button>
+        )}
       </div>
+
+      {showAllHolidays && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center sm:items-center"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Next ${allUpcomingHolidays.length} public holidays`}
+        >
+          <div
+            className="absolute inset-0 bg-black/70"
+            onClick={() => setShowAllHolidays(false)}
+          />
+
+          <div className="relative z-10 flex max-h-[85vh] w-full flex-col rounded-t-3xl border-t border-white/10 bg-slate-950 sm:max-w-md sm:rounded-3xl sm:border">
+            <div className="flex shrink-0 items-center justify-between border-b border-white/10 p-4">
+              <div className="text-sm font-bold text-white">
+                Next {allUpcomingHolidays.length} Public Holidays
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAllHolidays(false)}
+                aria-label="Close"
+                className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white/5 text-white active:bg-white/15"
+              >
+                <XMarkIcon className="size-5" />
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-2.5 overflow-y-auto p-4">
+              {allUpcomingHolidays.map(renderHolidayRow)}
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
