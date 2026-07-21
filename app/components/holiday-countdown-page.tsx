@@ -13,7 +13,7 @@ import bgImage from '../../public/mountains_sheep.jpg'
 import {
   CalendarDaysIcon,
   ArrowTopRightOnSquareIcon,
-  ChevronDownIcon,
+  ChevronRightIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
 
@@ -316,7 +316,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
             className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-2xl border border-white/10 bg-white/[0.03] p-3 text-xs font-bold tracking-wide text-gray-300 active:bg-white/10"
           >
             Show next {allUpcomingHolidays.length} holidays
-            <ChevronDownIcon className="size-3.5" />
+            <ChevronRightIcon className="size-3.5" />
           </button>
         )}
       </div>
