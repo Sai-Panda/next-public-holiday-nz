@@ -2,7 +2,7 @@ import { Holiday } from "../types/holiday";
 import {
   SparklesIcon,
   SunIcon,
-  GlobeAsiaAustraliaIcon,
+  ScaleIcon,
   BookOpenIcon,
   HeartIcon,
   ShieldCheckIcon,
@@ -28,7 +28,9 @@ export const holidays: Holiday[] = [
     name: "Waitangi Day",
     dates: ["2026-02-06", "2027-02-08", "2028-02-07"],
     infoUrl: "https://www.waitangi.org.nz/whats-on/waitangi-day",
-    emoji: GlobeAsiaAustraliaIcon,
+    // Scales rather than a generic globe: Waitangi Day marks the Treaty of
+    // Waitangi, a partnership/agreement between Maori and the Crown.
+    emoji: ScaleIcon,
   },
   {
     name: "Good Friday",
