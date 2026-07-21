@@ -1,28 +1,31 @@
 import { Holiday } from "../types/holiday";
 import {
   SparklesIcon,
-  SunIcon,
+  MoonIcon,
   DocumentTextIcon,
-  BookOpenIcon,
   HeartIcon,
+  SunIcon,
   ShieldCheckIcon,
-  TrophyIcon,
   StarIcon,
   WrenchScrewdriverIcon,
   GiftIcon,
   ShoppingBagIcon,
 } from "@heroicons/react/24/solid";
+import { CrownIcon } from "../components/icons/CrownIcon";
 
 export const holidays: Holiday[] = [
   {
     name: "New Year's Day",
     dates: ["2026-01-01", "2027-01-01", "2028-01-03"],
+    // Fireworks/confetti at midnight.
     emoji: SparklesIcon,
   },
   {
     name: "Day after New Year's Day",
     dates: ["2026-01-02", "2027-01-04", "2028-01-04"],
-    emoji: SunIcon,
+    // A distinct NZ/Hogmanay-style extra day off: sleeping in and
+    // recovering from New Year's Eve, not a "new day" in its own right.
+    emoji: MoonIcon,
   },
   {
     name: "Waitangi Day",
@@ -36,25 +39,28 @@ export const holidays: Holiday[] = [
     name: "Good Friday",
     dates: ["2026-04-03", "2027-03-26", "2028-04-14"],
     infoUrl: "https://tumanako.pndiocese.org.nz/2021/03/why-would-we-call-it-good-friday/",
-    emoji: BookOpenIcon,
+    // The solemn, sacrificial day of the crucifixion.
+    emoji: HeartIcon,
   },
   {
     name: "Easter Monday",
     dates: ["2026-04-06", "2027-03-29", "2028-04-17"],
     infoUrl: "https://www.timeanddate.com/holidays/new-zealand/easter-monday",
-    emoji: HeartIcon,
+    // The lighter day after: resurrection/new-dawn imagery, family time.
+    emoji: SunIcon,
   },
   {
     name: "ANZAC Day",
     dates: ["2026-04-27", "2027-04-26", "2028-04-25"],
     infoUrl: "https://nzhistory.govt.nz/war/anzac-day/introduction",
+    // Valor and protection: remembrance of military service.
     emoji: ShieldCheckIcon,
   },
   {
     name: "King's Birthday",
     dates: ["2026-06-01", "2027-06-07", "2028-06-05"],
     infoUrl: "https://my.christchurchcitylibraries.com/kings-birthday/",
-    emoji: TrophyIcon,
+    emoji: CrownIcon,
   },
   {
     name: "Matariki",
