@@ -148,7 +148,6 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
 
   const renderHolidayRow = (upcomingHoliday: HolidayOccurrence) => {
     const holidayData = upcomingHoliday.holiday;
-    const EmojiIcon = holidayData.emoji;
     const date = upcomingHoliday.date;
     const countdown = getCountdownParts(date, now);
     // Only holidays with a theme (currently just Labour Day) get an
@@ -175,27 +174,18 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
         }
       >
         <div className="flex min-w-0 items-center gap-3">
-          <div
-            className="flex size-10 shrink-0 items-center justify-center rounded-full"
-            style={
-              accent
-                ? {
-                    background: `radial-gradient(circle at 35% 30%, color-mix(in srgb, ${accent} 65%, white), color-mix(in srgb, ${accent} 55%, black) 70%)`,
-                    color: `color-mix(in srgb, ${accent} 20%, white)`,
-                  }
-                : { background: "rgba(255,255,255,0.07)", color: "#e2e8f0" }
-            }
-          >
-            {EmojiIcon && <EmojiIcon className="size-5" />}
-          </div>
-
           <div className="min-w-0">
-            <div
-              className="truncate text-sm font-bold text-white"
+            <a
+              href={holidayData.infoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Learn more about ${holidayData.name}`}
+              className="group flex min-w-0 items-center gap-1 truncate text-sm font-bold text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
               style={accent ? { color: `color-mix(in srgb, ${accent} 35%, white)` } : undefined}
             >
-              {holidayData.name}
-            </div>
+              <span className="truncate">{holidayData.name}</span>
+              <ArrowTopRightOnSquareIcon className="size-3 shrink-0 opacity-60 transition-opacity group-hover:opacity-100" />
+            </a>
             <div className="text-[0.68rem] font-normal text-gray-400">
               {getReadableDate(date)}
             </div>
@@ -230,7 +220,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
 
   return (
     <main className="relative min-h-screen text-slate-950 flex flex-col bg-slate-950">
-      <div className="relative min-h-[60vh] w-full shrink-0 lg:flex lg:min-h-[75vh] lg:items-center">
+      <div className="relative min-h-[60vh] w-full shrink-0 lg:flex lg:items-center">
         <Image
           src={bgImage}
           alt="Background Image"
@@ -247,14 +237,14 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
         {/* Relative (not absolute/inset-0) so this content is in normal flow and drives the
             hero's height — if zoomed text needs more than min-h-[60vh], the hero grows and
             pushes the section below down instead of the text overlapping it. */}
-        <div className="p-4 relative z-20 text-white font-bold mt-5 lg:mx-auto lg:mt-8 lg:w-full lg:max-w-4xl lg:px-16 lg:text-center">
-          <div className="text-xl w-6/7 lg:w-auto lg:text-2xl">
+        <div className="p-4 relative z-20 text-white font-bold mt-5 text-center lg:mx-auto lg:mt-8 lg:w-full lg:max-w-4xl lg:px-16">
+          <div className="text-xl lg:text-2xl">
             Next NZ National Public Holiday
           </div>
 
           <div className="text-6xl my-3 lg:text-8xl lg:my-4">{nextHoliday.name}</div>
 
-          <div className="flex flex-row items-center lg:justify-center">
+          <div className="flex flex-row items-center justify-center">
             <CalendarDaysIcon className="size-7 lg:size-8" />
             <div className="ml-2 font-normal lg:text-lg">
               {getReadableDate(nextHolidayDate)}
@@ -265,7 +255,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
             Countdown
           </div>
 
-          <div className="mt-3 flex items-center gap-2 lg:justify-center lg:gap-3">
+          <div className="mt-3 flex items-center justify-center gap-2 lg:gap-3">
             {[
               { value: nextHolidayCountdownValues[0], label: "DAYS" },
               { value: nextHolidayCountdownValues[1], label: "HOURS" },
@@ -285,23 +275,21 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
             ))}
           </div>
 
-          {nextHoliday.infoUrl ? (
-            <div>
-              <a
-                href={nextHoliday.infoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-black/70 text-white mt-5 px-4 py-2 rounded-md flex items-center w-fit transition-colors hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60 lg:mx-auto lg:mt-8 lg:px-6 lg:py-3 lg:text-lg"
-              >
-                Learn more about {nextHoliday.name} <ArrowTopRightOnSquareIcon className="size-5 ml-1 lg:size-6" />
-              </a>
-            </div>
-          ) : null}
+          <div>
+            <a
+              href={nextHoliday.infoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-black/70 text-white mt-5 mx-auto px-4 py-2 rounded-md flex items-center w-fit transition-colors hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60 lg:mt-8 lg:px-6 lg:py-3 lg:text-lg"
+            >
+              Learn more about {nextHoliday.name} <ArrowTopRightOnSquareIcon className="size-5 ml-1 lg:size-6" />
+            </a>
+          </div>
         </div>
       </div>
 
       <div className="p-4 text-white font-bold bg-slate-950 grow lg:px-16 lg:py-10">
-        <div className="lg:mx-auto lg:max-w-2xl">
+        <div className="mx-auto max-w-2xl">
           <div className="lg:text-xl">
             Upcoming NZ National Public Holidays
           </div>
