@@ -17,12 +17,14 @@ export const holidays: Holiday[] = [
   {
     name: "New Year's Day",
     dates: ["2026-01-01", "2027-01-01", "2028-01-03"],
+    infoUrl: "https://publicholidays.co.nz/new-years-day/",
     // Fireworks/confetti at midnight.
     emoji: SparklesIcon,
   },
   {
     name: "Day after New Year's Day",
     dates: ["2026-01-02", "2027-01-04", "2028-01-04"],
+    infoUrl: "https://www.officeholidays.com/holidays/new-zealand/day-after-new-years-day",
     // A distinct NZ/Hogmanay-style extra day off: sleeping in and
     // recovering from New Year's Eve, not a "new day" in its own right.
     emoji: MoonIcon,

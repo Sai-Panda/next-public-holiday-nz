@@ -1,7 +1,8 @@
 export type Holiday = {
   name: string;
   dates: string[];
-  infoUrl?: string;
+  // Required so every holiday has a "Learn more about" link (see issue #11).
+  infoUrl: string;
   theme?: HolidayTheme;
   emoji?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 };

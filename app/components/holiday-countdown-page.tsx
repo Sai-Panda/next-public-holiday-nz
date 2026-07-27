@@ -190,12 +190,17 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
           </div>
 
           <div className="min-w-0">
-            <div
-              className="truncate text-sm font-bold text-white"
+            <a
+              href={holidayData.infoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Learn more about ${holidayData.name}`}
+              className="group flex min-w-0 items-center gap-1 truncate text-sm font-bold text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
               style={accent ? { color: `color-mix(in srgb, ${accent} 35%, white)` } : undefined}
             >
-              {holidayData.name}
-            </div>
+              <span className="truncate">{holidayData.name}</span>
+              <ArrowTopRightOnSquareIcon className="size-3 shrink-0 opacity-60 transition-opacity group-hover:opacity-100" />
+            </a>
             <div className="text-[0.68rem] font-normal text-gray-400">
               {getReadableDate(date)}
             </div>
@@ -285,18 +290,16 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
             ))}
           </div>
 
-          {nextHoliday.infoUrl ? (
-            <div>
-              <a
-                href={nextHoliday.infoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-black/70 text-white mt-5 px-4 py-2 rounded-md flex items-center w-fit transition-colors hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60 lg:mx-auto lg:mt-8 lg:px-6 lg:py-3 lg:text-lg"
-              >
-                Learn more about {nextHoliday.name} <ArrowTopRightOnSquareIcon className="size-5 ml-1 lg:size-6" />
-              </a>
-            </div>
-          ) : null}
+          <div>
+            <a
+              href={nextHoliday.infoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-black/70 text-white mt-5 px-4 py-2 rounded-md flex items-center w-fit transition-colors hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60 lg:mx-auto lg:mt-8 lg:px-6 lg:py-3 lg:text-lg"
+            >
+              Learn more about {nextHoliday.name} <ArrowTopRightOnSquareIcon className="size-5 ml-1 lg:size-6" />
+            </a>
+          </div>
         </div>
       </div>
 
