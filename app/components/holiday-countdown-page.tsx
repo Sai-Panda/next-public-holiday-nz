@@ -9,13 +9,31 @@ import {
   HolidayOccurrence,
 } from "../util/holiday.util";
 import { holidays } from "../types/holidays";
-import bgImage from '../../public/mountains_sheep.jpg'
+import { PhotoCredit } from "./photo-credit";
+import sheepBgImage from '../../public/mountains_sheep.jpg'
+import aorakiBgImage from '../../public/aoraki_mountain.jpg'
 import {
   CalendarDaysIcon,
   ArrowTopRightOnSquareIcon,
   ChevronRightIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
+
+const backgroundImages = [
+  {
+    src: sheepBgImage,
+    photographer: "trf57",
+    href: "https://pixabay.com/photos/sheep-new-zealand-farm-agriculture-1766722/",
+  },
+  {
+    src: aorakiBgImage,
+    photographer: "EclipseChasers",
+    href: "https://pixabay.com/photos/aoraki-nature-mountains-landscape-10180083/",
+  },
+];
+
+// Swap this index to preview a different background; only one is shown at a time.
+const activeBackground = backgroundImages[1];
 
 const UPCOMING_LIST_LIMIT = 4;
 const UPCOMING_OVERLAY_LIMIT = 10;
@@ -222,22 +240,26 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
     <main className="relative min-h-screen text-slate-950 flex flex-col bg-slate-950">
       <div className="relative min-h-[60vh] w-full shrink-0 lg:flex lg:items-center">
         <Image
-          src={bgImage}
+          src={activeBackground.src}
           alt="Background Image"
           placeholder="blur"
           quality={80}
           fill
           className="object-cover z-0 h-full"
         />
+        {/* Uniform dark wash so the white text stays readable regardless of how bright any
+            given background photo is (e.g. snow/sky), without needing per-image tuning. */}
+        <div className="absolute inset-0 bg-black/30 z-[1] pointer-events-none" />
         {/* Fades the image to slate-950 before the upcoming-holidays section begins, so the
             transition is smooth instead of a hard cut. Sits above the image but below the
             text/button layer (z-20) so it never dims or blocks the CTA. Fixed height (not a
             % of the hero) since the hero's height is content-driven and may grow at zoom. */}
         <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-950 to-transparent z-10 pointer-events-none lg:h-40" />
+        <PhotoCredit photographer={activeBackground.photographer} href={activeBackground.href} />
         {/* Relative (not absolute/inset-0) so this content is in normal flow and drives the
             hero's height — if zoomed text needs more than min-h-[60vh], the hero grows and
             pushes the section below down instead of the text overlapping it. */}
-        <div className="p-4 relative z-20 text-white font-bold mt-5 text-center lg:mx-auto lg:mt-8 lg:w-full lg:max-w-4xl lg:px-16">
+        <div className="p-4 pb-12 relative z-20 text-white font-bold mt-5 text-center lg:mx-auto lg:mt-8 lg:w-full lg:max-w-4xl lg:px-16 lg:pb-14">
           <div className="text-xl lg:text-2xl">
             Next NZ National Public Holiday
           </div>
