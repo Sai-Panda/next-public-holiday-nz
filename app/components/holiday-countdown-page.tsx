@@ -247,6 +247,9 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
           fill
           className="object-cover z-0 h-full"
         />
+        {/* Uniform dark wash so the white text stays readable regardless of how bright any
+            given background photo is (e.g. snow/sky), without needing per-image tuning. */}
+        <div className="absolute inset-0 bg-black/30 z-[1] pointer-events-none" />
         {/* Fades the image to slate-950 before the upcoming-holidays section begins, so the
             transition is smooth instead of a hard cut. Sits above the image but below the
             text/button layer (z-20) so it never dims or blocks the CTA. Fixed height (not a
