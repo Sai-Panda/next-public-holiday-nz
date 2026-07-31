@@ -1,4 +1,4 @@
-import { Holiday } from "../types/holiday";
+import { CountdownParts, Holiday } from "../types/holiday";
 
 export type HolidayOccurrence = {
   holiday: Holiday;
@@ -46,9 +46,29 @@ export const getTime = (date: string) => {
 
   const [year, month, day] = date.split("-").map(Number);
   const utcMidnight = Date.UTC(year, month - 1, day, 0, 0, 0);
-  const offsetMinutes = getNzOffsetMinutes(utcMidnight);
 
-  return utcMidnight - offsetMinutes * 60 * 1000;
+  // The offset in effect at NZ local midnight can differ from the offset at
+  // UTC midnight (12-13 hours earlier, same NZ date) whenever a DST
+  // transition falls in between. Resolve once to get close, then re-resolve
+  // at that candidate instant so the correct side of the transition is used.
+  let time = utcMidnight - getNzOffsetMinutes(utcMidnight) * 60 * 1000;
+  time = utcMidnight - getNzOffsetMinutes(time) * 60 * 1000;
+
+  return time;
+};
+
+// The next NZ calendar date, as a date string. Deliberately calendar
+// arithmetic (not `+ 86_400_000`): an NZ day is 23 or 25 hours across a DST
+// transition, so adding milliseconds can land on the wrong date.
+const nextNzDateString = (date: string) => {
+  const [year, month, day] = date.split("-").map(Number);
+  const next = new Date(Date.UTC(year, month - 1, day + 1));
+
+  return [
+    next.getUTCFullYear(),
+    String(next.getUTCMonth() + 1).padStart(2, "0"),
+    String(next.getUTCDate()).padStart(2, "0"),
+  ].join("-");
 };
 
 export const getHolidayOccurrences = (holidays: Holiday[]) => {
@@ -68,6 +88,23 @@ export const getUpcomingHolidayOccurrences = (
   limit: number,
 ) => {
   return getHolidayOccurrences(holidays)
-    .filter((occurrence) => getTime(occurrence.date) > now)
+    .filter((occurrence) => getTime(nextNzDateString(occurrence.date)) > now)
     .slice(0, limit);
+};
+
+export const getCountdownParts = (date: string, now: number): CountdownParts => {
+  const diff = Math.max(0, getTime(date) - now);
+
+  return {
+    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((diff / (1000 * 60)) % 60),
+    seconds: Math.floor((diff / 1000) % 60),
+    done: getTime(date) <= now,
+  };
+};
+
+export const formatCountdownValues = (parts: CountdownParts) => {
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return [pad(parts.days), pad(parts.hours), pad(parts.minutes), pad(parts.seconds)];
 };
