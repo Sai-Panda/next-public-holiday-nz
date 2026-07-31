@@ -47,6 +47,11 @@ describe("getTime", () => {
   it("resolves the offset in effect at NZ local midnight across the DST-start transition (2026-09-27)", () => {
     expect(nzWallClock(getTime("2026-09-27"))).toBe("2026-09-27 00:00:00");
   });
+
+  it("falls back to native Date parsing for non-YYYY-MM-DD input, as used by the /dev simulated-now route", () => {
+    const isoDateTime = "2026-12-25T10:00:00+13:00";
+    expect(getTime(isoDateTime)).toBe(new Date(isoDateTime).getTime());
+  });
 });
 
 describe("getUpcomingHolidayOccurrences", () => {
@@ -75,6 +80,11 @@ describe("getUpcomingHolidayOccurrences", () => {
     const justBefore = getTime("2026-12-25") - 1;
     const [next] = getUpcomingHolidayOccurrences(holidays, justBefore, 1);
     expect(next.holiday.name).toBe("Christmas Day");
+  });
+
+  it("returns an empty list once every holiday's NZ day has passed", () => {
+    const afterEverything = getTime("2026-12-29");
+    expect(getUpcomingHolidayOccurrences(holidays, afterEverything, 1)).toEqual([]);
   });
 });
 
@@ -111,7 +121,7 @@ describe("getCountdownParts", () => {
   it("clamps days/hours/minutes/seconds to zero once done, rather than going negative", () => {
     const wellAfter = getTime("2026-12-25") + 5 * 24 * 60 * 60 * 1000;
     const parts = getCountdownParts("2026-12-25", wellAfter);
-    expect(parts).toMatchObject({ days: 0, hours: 0, minutes: 0, seconds: 0, done: true });
+    expect(parts).toEqual({ days: 0, hours: 0, minutes: 0, seconds: 0, done: true });
   });
 });
 
@@ -125,28 +135,58 @@ describe("formatCountdownValues", () => {
     const parts = getCountdownParts("2026-12-25", getTime("2026-12-25"));
     expect(formatCountdownValues(parts)).not.toContain("Today");
   });
+
+  it("zero-pads single-digit fields but leaves multi-digit fields (e.g. a 3-digit day count) untouched", () => {
+    expect(
+      formatCountdownValues({ days: 107, hours: 1, minutes: 18, seconds: 5, done: false }),
+    ).toEqual(["107", "01", "18", "05"]);
+  });
 });
 
 // Golden test: the "today" boundary must hold for every real hardcoded
 // holiday occurrence (all 33 dates across 2026-2028), not just Christmas.
-// This is deliberately independent of getTime/nextNzDateString internals —
-// it derives the next calendar date with its own arithmetic so it verifies
-// the observable contract, not the implementation.
+// Deliberately independent of the implementation's own rollover technique
+// (holiday.util.ts's nextNzDateString uses Date.UTC's overflow normalization)
+// — this hand-rolls the same calendar rule a different way, so a bug shared
+// by both would have to be a bug in the calendar itself, not in either
+// implementation.
+const isLeapYear = (year: number) => year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+
 const nextCalendarDateString = (date: string) => {
   const [year, month, day] = date.split("-").map(Number);
-  const next = new Date(Date.UTC(year, month - 1, day + 1));
+  const daysInMonth = [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-  return [
-    next.getUTCFullYear(),
-    String(next.getUTCMonth() + 1).padStart(2, "0"),
-    String(next.getUTCDate()).padStart(2, "0"),
-  ].join("-");
+  let nextYear = year;
+  let nextMonth = month;
+  let nextDay = day + 1;
+
+  if (nextDay > daysInMonth[month - 1]) {
+    nextDay = 1;
+    nextMonth += 1;
+  }
+  if (nextMonth > 12) {
+    nextMonth = 1;
+    nextYear += 1;
+  }
+
+  return `${nextYear}-${String(nextMonth).padStart(2, "0")}-${String(nextDay).padStart(2, "0")}`;
 };
+
+describe("nextCalendarDateString (test oracle self-check)", () => {
+  it("rolls over month, year and leap-year boundaries", () => {
+    expect(nextCalendarDateString("2026-01-31")).toBe("2026-02-01");
+    expect(nextCalendarDateString("2026-12-31")).toBe("2027-01-01");
+    expect(nextCalendarDateString("2028-02-28")).toBe("2028-02-29"); // 2028 is a leap year
+    expect(nextCalendarDateString("2026-02-28")).toBe("2026-03-01"); // 2026 is not
+  });
+});
 
 describe("today state across every real holiday occurrence", () => {
   const occurrences = getHolidayOccurrences(realHolidays);
 
-  expect(occurrences.length).toBeGreaterThan(30);
+  it("has more than 30 real holiday occurrences loaded to sweep", () => {
+    expect(occurrences.length).toBeGreaterThan(30);
+  });
 
   occurrences.forEach((occurrence, index) => {
     const label = `${occurrence.holiday.name} (${occurrence.date})`;
