@@ -2,9 +2,9 @@
 
 import { Fragment, useEffect, useState } from "react";
 import Image from "next/image";
-import { CountdownParts } from "../types/holiday";
 import {
-  getTime,
+  formatCountdownValues,
+  getCountdownParts,
   getUpcomingHolidayOccurrences,
   HolidayOccurrence,
 } from "../util/holiday.util";
@@ -51,32 +51,6 @@ const NzFlagBackground = () => (
     <div className="absolute inset-0 bg-blue-950/55" />
   </div>
 );
-
-const getCountdownParts = (date: string, now: number): CountdownParts => {
-  const diff = Math.max(0, getTime(date) - now);
-
-  return {
-    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-    minutes: Math.floor((diff / (1000 * 60)) % 60),
-    seconds: Math.floor((diff / 1000) % 60),
-    done: diff === 0,
-  };
-};
-
-const formatCountdownValues = (parts: CountdownParts) => {
-  if (parts.done) {
-    return ["Today", "Today", "Today", "Today"];
-  }
-
-  const pad = (value: number) => String(value).padStart(2, "0");
-  return [
-    pad(parts.days),
-    pad(parts.hours),
-    pad(parts.minutes),
-    pad(parts.seconds),
-  ];
-};
 
 type HolidayCountdownPageProps = {
   simulatedNow?: number;
@@ -163,6 +137,11 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
   const nextHolidayDate = nextHolidayOccurrence.date;
   const nextHolidayCountdown = getCountdownParts(nextHolidayDate, now);
   const nextHolidayCountdownValues = formatCountdownValues(nextHolidayCountdown);
+  const isHolidayToday = nextHolidayCountdown.done;
+  const followingHolidayOccurrence = upcomingHolidayOccurrences[1];
+  const followingHolidayDays = followingHolidayOccurrence
+    ? getCountdownParts(followingHolidayOccurrence.date, now).days
+    : undefined;
 
   const renderHolidayRow = (upcomingHoliday: HolidayOccurrence) => {
     const holidayData = upcomingHoliday.holiday;
@@ -226,9 +205,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
           >
             {(() => {
               const [d, h, m, s] = formatCountdownValues(countdown);
-              return countdown.done
-                ? d
-                : `${d}d ${h}h ${m}m ${s}s`;
+              return `${d}d ${h}h ${m}m ${s}s`;
             })()}
           </div>
         </div>
@@ -261,7 +238,7 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
             pushes the section below down instead of the text overlapping it. */}
         <div className="p-4 pb-12 relative z-20 text-white font-bold mt-5 text-center lg:mx-auto lg:mt-8 lg:w-full lg:max-w-4xl lg:px-16 lg:pb-14">
           <div className="text-xl lg:text-2xl">
-            Next NZ National Public Holiday
+            {isHolidayToday ? "Today is" : "Next NZ National Public Holiday"}
           </div>
 
           <div className="text-6xl my-3 lg:text-8xl lg:my-4">{nextHoliday.name}</div>
@@ -273,29 +250,45 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
             </div>
           </div>
 
-          <div className="mt-2 lg:mt-6 lg:text-lg">
-            Countdown
-          </div>
-
-          <div className="mt-3 flex items-center justify-center gap-2 lg:gap-3">
-            {[
-              { value: nextHolidayCountdownValues[0], label: "DAYS" },
-              { value: nextHolidayCountdownValues[1], label: "HOURS" },
-              { value: nextHolidayCountdownValues[2], label: "MINUTES" },
-              { value: nextHolidayCountdownValues[3], label: "SECONDS" },
-            ].map((unit, i) => (
-              <Fragment key={unit.label}>
-                {i > 0 && (
-                  <span className="text-3xl font-bold text-white pb-5 lg:text-4xl lg:pb-6">:</span>
-                )}
-                <div className="flex flex-col items-center bg-black/40 rounded-md px-2 py-2 lg:px-4 lg:py-4">
-                  {/* suppressHydrationWarning: countdown value intentionally differs between SSR and client */}
-                  <span className="text-4xl font-bold text-white leading-none lg:text-6xl" suppressHydrationWarning>{unit.value}</span>
-                  <span className="text-[0.6rem] font-semibold text-gray-300 mt-1 tracking-widest lg:mt-2 lg:text-xs">{unit.label}</span>
+          {isHolidayToday ? (
+            <div className="mt-4 lg:mt-6">
+              <div className="text-lg lg:text-xl">
+                Enjoy your day off, Aotearoa
+              </div>
+              {followingHolidayOccurrence && (
+                <div className="mt-2 font-normal text-gray-300 lg:text-lg">
+                  Next up: {followingHolidayOccurrence.holiday.name} · in{" "}
+                  {followingHolidayDays} day{followingHolidayDays === 1 ? "" : "s"}
                 </div>
-              </Fragment>
-            ))}
-          </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <div className="mt-2 lg:mt-6 lg:text-lg">
+                Countdown
+              </div>
+
+              <div className="mt-3 flex items-center justify-center gap-2 lg:gap-3">
+                {[
+                  { value: nextHolidayCountdownValues[0], label: "DAYS" },
+                  { value: nextHolidayCountdownValues[1], label: "HOURS" },
+                  { value: nextHolidayCountdownValues[2], label: "MINUTES" },
+                  { value: nextHolidayCountdownValues[3], label: "SECONDS" },
+                ].map((unit, i) => (
+                  <Fragment key={unit.label}>
+                    {i > 0 && (
+                      <span className="text-3xl font-bold text-white pb-5 lg:text-4xl lg:pb-6">:</span>
+                    )}
+                    <div className="flex flex-col items-center bg-black/40 rounded-md px-2 py-2 lg:px-4 lg:py-4">
+                      {/* suppressHydrationWarning: countdown value intentionally differs between SSR and client */}
+                      <span className="text-4xl font-bold text-white leading-none lg:text-6xl" suppressHydrationWarning>{unit.value}</span>
+                      <span className="text-[0.6rem] font-semibold text-gray-300 mt-1 tracking-widest lg:mt-2 lg:text-xs">{unit.label}</span>
+                    </div>
+                  </Fragment>
+                ))}
+              </div>
+            </>
+          )}
 
           <div>
             <a

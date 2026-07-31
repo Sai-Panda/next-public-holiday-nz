@@ -26,6 +26,8 @@ Build and maintain a beautiful Next.js app that shows countdowns for the next Ne
 - For code changes, run:
   - `npm run lint`
   - `npm run build`
+  - `npm test`
+- Before every `git push`, run all three of the above and confirm they pass. Never push on a failing test, lint, or build.
 
 ## Source of truth files
 - Project context: `.github/copilot-context.md`
