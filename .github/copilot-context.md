@@ -21,6 +21,10 @@
 ## Decisions log
 - Added Copilot instruction and context files to preserve shared development direction.
 - Product direction set by user: beautiful countdown website for NZ public holidays.
+- Labour Day direction: an editorial 8/8/8 system rooted in the New Zealand eight-hour-day story.
+- Labour Day uses an intentionally image-free graphic system for a lightweight page; AI-generated photography is not a production asset.
+- Keep the experience single-purpose: no navigation bar and no add-to-calendar control.
+- Keep historical context terse on-page; link to the authoritative holiday source instead of adding explanatory sections.
 
 ## Update rule
 When project direction changes, update this file in the same PR so future Copilot sessions inherit the latest context.

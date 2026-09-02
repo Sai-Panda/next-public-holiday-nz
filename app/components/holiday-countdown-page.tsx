@@ -1,107 +1,61 @@
 "use client";
 
 import { Fragment, useEffect, useState } from "react";
-import Image from "next/image";
+import {
+  ArrowTopRightOnSquareIcon,
+  BriefcaseIcon,
+  ChevronRightIcon,
+  MoonIcon,
+  SunIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
+import { holidays } from "../types/holidays";
 import {
   formatCountdownValues,
   getCountdownParts,
   getUpcomingHolidayOccurrences,
   HolidayOccurrence,
 } from "../util/holiday.util";
-import { holidays } from "../types/holidays";
-import { PhotoCredit } from "./photo-credit";
-import sheepBgImage from '../../public/mountains_sheep.jpg'
-import aorakiBgImage from '../../public/aoraki_mountain.jpg'
-import {
-  CalendarDaysIcon,
-  ArrowTopRightOnSquareIcon,
-  ChevronRightIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/solid";
-
-const backgroundImages = [
-  {
-    src: sheepBgImage,
-    photographer: "trf57",
-    href: "https://pixabay.com/photos/sheep-new-zealand-farm-agriculture-1766722/",
-  },
-  {
-    src: aorakiBgImage,
-    photographer: "EclipseChasers",
-    href: "https://pixabay.com/photos/aoraki-nature-mountains-landscape-10180083/",
-  },
-];
-
-// Swap this index to preview a different background; only one is shown at a time.
-const activeBackground = backgroundImages[1];
+import styles from "./holiday-countdown-page.module.css";
 
 const UPCOMING_LIST_LIMIT = 4;
 const UPCOMING_OVERLAY_LIMIT = 10;
-
-const NzFlagBackground = () => (
-  <div className="absolute inset-0 -z-10">
-    <Image
-      src="/nz_flag.svg"
-      alt=""
-      fill
-      className="object-cover"
-      priority
-    />
-    <div className="absolute inset-0 backdrop-blur-[5px]" />
-    <div className="absolute inset-0 bg-blue-950/55" />
-  </div>
-);
 
 type HolidayCountdownPageProps = {
   simulatedNow?: number;
 };
 
-const getReadableDate = (dateString: string) => {
-  const date: Date = new Date(dateString);
+const getReadableDate = (dateString: string) =>
+  new Date(dateString).toLocaleDateString("en-NZ", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "Pacific/Auckland",
+  });
 
-  // Pinned to Pacific/Auckland: these are NZ holiday dates, so they must read
-  // correctly regardless of the viewer's own timezone (otherwise a visitor
-  // west of NZ, e.g. in the Americas, sees the date rolled back by a day).
-  const options: Intl.DateTimeFormatOptions = {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    timeZone: 'Pacific/Auckland',
-  };
-
-  const readableDate: string = date.toLocaleDateString("en-US", options);
-
-  return readableDate.replace(/,(?=[^,]*$)/, "");
-}
-
-export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownPageProps = {}) {
+export default function HolidayCountdownPage({
+  simulatedNow,
+}: HolidayCountdownPageProps = {}) {
   const [now, setNow] = useState(() => simulatedNow ?? Date.now());
   const [showAllHolidays, setShowAllHolidays] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (simulatedNow !== undefined) {
-        setNow((prevNow) => prevNow + 1000);
-      } else {
-        setNow(Date.now());
-      }
+    const interval = window.setInterval(() => {
+      setNow((currentNow) =>
+        simulatedNow === undefined ? Date.now() : currentNow + 1000,
+      );
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => window.clearInterval(interval);
   }, [simulatedNow]);
 
-  // Lock background scroll and let Escape close the overlay while it's open.
   useEffect(() => {
-    if (!showAllHolidays) {
-      return;
-    }
+    if (!showAllHolidays) return;
 
     document.body.style.overflow = "hidden";
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setShowAllHolidays(false);
-      }
+      if (event.key === "Escape") setShowAllHolidays(false);
     };
     window.addEventListener("keydown", handleKeyDown);
 
@@ -111,251 +65,185 @@ export default function HolidayCountdownPage({ simulatedNow }: HolidayCountdownP
     };
   }, [showAllHolidays]);
 
-  const upcomingHolidayOccurrences = getUpcomingHolidayOccurrences(
+  const holidayOccurrences = getUpcomingHolidayOccurrences(
     holidays,
     now,
     UPCOMING_OVERLAY_LIMIT + 1,
   );
-  const nextHolidayOccurrence = upcomingHolidayOccurrences[0];
-  const upcomingHolidays = upcomingHolidayOccurrences.slice(1, UPCOMING_LIST_LIMIT + 1);
-  const allUpcomingHolidays = upcomingHolidayOccurrences.slice(1);
+  const nextOccurrence = holidayOccurrences[0];
 
-  if (!nextHolidayOccurrence) {
+  if (!nextOccurrence) {
     return (
-      <main className="relative min-h-screen overflow-hidden text-slate-950">
-        <NzFlagBackground />
-        <div className="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-4 py-6 text-center sm:px-6 sm:py-10 lg:px-8">
-          <p className="text-xl font-semibold text-white">
-            No upcoming NZ public holidays are loaded yet.
-          </p>
-        </div>
+      <main className={styles.emptyState}>
+        No upcoming New Zealand public holidays are loaded yet.
       </main>
     );
   }
 
-  const nextHoliday = nextHolidayOccurrence.holiday;
-  const nextHolidayDate = nextHolidayOccurrence.date;
-  const nextHolidayCountdown = getCountdownParts(nextHolidayDate, now);
-  const nextHolidayCountdownValues = formatCountdownValues(nextHolidayCountdown);
-  const isHolidayToday = nextHolidayCountdown.done;
-  const followingHolidayOccurrence = upcomingHolidayOccurrences[1];
-  const followingHolidayDays = followingHolidayOccurrence
-    ? getCountdownParts(followingHolidayOccurrence.date, now).days
-    : undefined;
+  const nextHoliday = nextOccurrence.holiday;
+  const countdown = getCountdownParts(nextOccurrence.date, now);
+  const countdownValues = formatCountdownValues(countdown);
+  const upcomingHolidays = holidayOccurrences.slice(1, UPCOMING_LIST_LIMIT + 1);
+  const allUpcomingHolidays = holidayOccurrences.slice(1);
 
-  const renderHolidayRow = (upcomingHoliday: HolidayOccurrence) => {
-    const holidayData = upcomingHoliday.holiday;
-    const date = upcomingHoliday.date;
-    const countdown = getCountdownParts(date, now);
-    // Only holidays with a theme (currently just Labour Day) get an
-    // accent glow; everything else stays in the plain glass style
-    // so it doesn't compete with the "next holiday" hero above.
-    const accent = holidayData.theme?.accentColor;
+  const renderHolidayRow = (occurrence: HolidayOccurrence) => {
+    const rowCountdown = getCountdownParts(occurrence.date, now);
+    const [days, hours, minutes, seconds] = formatCountdownValues(rowCountdown);
 
     return (
-      <div
-        className="flex items-center justify-between gap-3 rounded-2xl border p-3.5 transition-transform duration-150 lg:hover:-translate-y-0.5"
-        key={`${holidayData.name}-${date}`}
-        style={
-          accent
-            ? {
-                background: `linear-gradient(135deg, color-mix(in srgb, ${accent} 18%, transparent), color-mix(in srgb, ${accent} 3%, transparent))`,
-                borderColor: `color-mix(in srgb, ${accent} 40%, transparent)`,
-                boxShadow: `0 0 34px -8px color-mix(in srgb, ${accent} 45%, transparent)`,
-              }
-            : {
-                background:
-                  "linear-gradient(135deg, rgba(255,255,255,0.055), rgba(255,255,255,0.015))",
-                borderColor: "rgba(255,255,255,0.08)",
-              }
-        }
-      >
-        <div className="flex min-w-0 items-center gap-3">
-          <div className="min-w-0">
-            <a
-              href={holidayData.infoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Learn more about ${holidayData.name}`}
-              className="group flex min-w-0 items-center gap-1 truncate text-sm font-bold text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
-              style={accent ? { color: `color-mix(in srgb, ${accent} 35%, white)` } : undefined}
-            >
-              <span className="truncate">{holidayData.name}</span>
-              <ArrowTopRightOnSquareIcon className="size-3 shrink-0 opacity-60 transition-opacity group-hover:opacity-100" />
-            </a>
-            <div className="text-[0.68rem] font-normal text-gray-400">
-              {getReadableDate(date)}
-            </div>
-          </div>
-        </div>
-
-        <div className="shrink-0 text-right">
-          <div
-            className="text-[0.55rem] font-bold tracking-widest"
-            style={{ color: accent ? `color-mix(in srgb, ${accent} 70%, white)` : "#7c8494" }}
+      <article className={styles.holidayRow} key={`${occurrence.holiday.name}-${occurrence.date}`}>
+        <div>
+          <a
+            href={occurrence.holiday.infoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Learn more about ${occurrence.holiday.name}`}
           >
-            IN
-          </div>
-
-          {/* suppressHydrationWarning: countdown value intentionally differs between SSR and client */}
-          <div
-            className="text-xs font-semibold"
-            style={{ color: accent ? `color-mix(in srgb, ${accent} 35%, white)` : "#e5e7eb" }}
-            suppressHydrationWarning
-          >
-            {(() => {
-              const [d, h, m, s] = formatCountdownValues(countdown);
-              return `${d}d ${h}h ${m}m ${s}s`;
-            })()}
-          </div>
+            {occurrence.holiday.name}
+            <ArrowTopRightOnSquareIcon aria-hidden="true" />
+          </a>
+          <time dateTime={occurrence.date}>{getReadableDate(occurrence.date)}</time>
         </div>
-      </div>
+        <div className={styles.rowCountdown} suppressHydrationWarning>
+          <span>IN</span>
+          {days}d {hours}h {minutes}m {seconds}s
+        </div>
+      </article>
     );
   };
 
   return (
-    <main className="relative min-h-screen text-slate-950 flex flex-col bg-slate-950">
-      <div className="relative min-h-[60vh] w-full shrink-0 lg:flex lg:items-center">
-        <Image
-          src={activeBackground.src}
-          alt="Background Image"
-          placeholder="blur"
-          quality={80}
-          fill
-          className="object-cover z-0 h-full"
-        />
-        {/* Uniform dark wash so the white text stays readable regardless of how bright any
-            given background photo is (e.g. snow/sky), without needing per-image tuning. */}
-        <div className="absolute inset-0 bg-black/30 z-[1] pointer-events-none" />
-        {/* Fades the image to slate-950 before the upcoming-holidays section begins, so the
-            transition is smooth instead of a hard cut. Sits above the image but below the
-            text/button layer (z-20) so it never dims or blocks the CTA. Fixed height (not a
-            % of the hero) since the hero's height is content-driven and may grow at zoom. */}
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-950 to-transparent z-10 pointer-events-none lg:h-40" />
-        <PhotoCredit photographer={activeBackground.photographer} href={activeBackground.href} />
-        {/* Relative (not absolute/inset-0) so this content is in normal flow and drives the
-            hero's height — if zoomed text needs more than min-h-[60vh], the hero grows and
-            pushes the section below down instead of the text overlapping it. */}
-        <div className="p-4 pb-12 relative z-20 text-white font-bold mt-5 text-center lg:mx-auto lg:mt-8 lg:w-full lg:max-w-4xl lg:px-16 lg:pb-14">
-          <div className="text-xl lg:text-2xl">
-            {isHolidayToday ? "Today is" : "Next NZ National Public Holiday"}
+    <main className={styles.page}>
+      <section className={styles.hero}>
+        <div className={styles.heroCopy}>
+          <div className={styles.siteMark}>
+            <span>AOTEAROA</span>
+            <span>NEW ZEALAND</span>
+            <span>PUBLIC HOLIDAY COUNTDOWN</span>
           </div>
 
-          <div className="text-6xl my-3 lg:text-8xl lg:my-4">{nextHoliday.name}</div>
+          <p className={styles.eyebrow}>NEXT PUBLIC HOLIDAY — AOTEAROA NEW ZEALAND</p>
+          <h1>{nextHoliday.name}</h1>
+          <time className={styles.heroDate} dateTime={nextOccurrence.date}>
+            {getReadableDate(nextOccurrence.date)}
+          </time>
 
-          <div className="flex flex-row items-center justify-center">
-            <CalendarDaysIcon className="size-7 lg:size-8" />
-            <div className="ml-2 font-normal lg:text-lg">
-              {getReadableDate(nextHolidayDate)}
-            </div>
-          </div>
-
-          {isHolidayToday ? (
-            <div className="mt-4 lg:mt-6">
-              <div className="text-lg lg:text-xl">
-                Enjoy your day off, Aotearoa
-              </div>
-              {followingHolidayOccurrence && (
-                <div className="mt-2 font-normal text-gray-300 lg:text-lg">
-                  Next up: {followingHolidayOccurrence.holiday.name} · in{" "}
-                  {followingHolidayDays} day{followingHolidayDays === 1 ? "" : "s"}
+          <div className={styles.countdown} aria-label="Countdown to Labour Day">
+            {[
+              [countdownValues[0], "DAYS"],
+              [countdownValues[1], "HOURS"],
+              [countdownValues[2], "MINUTES"],
+              [countdownValues[3], "SECONDS"],
+            ].map(([value, label], index) => (
+              <Fragment key={label}>
+                {index > 0 && <span className={styles.countdownDivider}>:</span>}
+                <div className={styles.countdownUnit}>
+                  <strong suppressHydrationWarning>{value}</strong>
+                  <span>{label}</span>
                 </div>
-              )}
+              </Fragment>
+            ))}
+          </div>
+
+          <a
+            className={styles.historyLink}
+            href={nextHoliday.infoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Why we get the day off <span aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <div className={styles.eightStage} aria-label="Eight hours work, eight hours sleep, eight hours our own">
+          <div className={`${styles.eightFigure} ${styles.workEight}`}>
+            <p>8 HOURS WORK</p>
+            <div className={styles.eightLoop}>
+              <span className={styles.eightLoopInner}>
+                <BriefcaseIcon aria-hidden="true" />
+              </span>
             </div>
-          ) : (
-            <>
-              <div className="mt-2 lg:mt-6 lg:text-lg">
-                Countdown
-              </div>
+            <div className={styles.eightLoop}>
+              <span className={styles.eightLoopInner}>
+                <strong>WORK</strong>
+                <small>8 HOURS</small>
+              </span>
+            </div>
+          </div>
 
-              <div className="mt-3 flex items-center justify-center gap-2 lg:gap-3">
-                {[
-                  { value: nextHolidayCountdownValues[0], label: "DAYS" },
-                  { value: nextHolidayCountdownValues[1], label: "HOURS" },
-                  { value: nextHolidayCountdownValues[2], label: "MINUTES" },
-                  { value: nextHolidayCountdownValues[3], label: "SECONDS" },
-                ].map((unit, i) => (
-                  <Fragment key={unit.label}>
-                    {i > 0 && (
-                      <span className="text-3xl font-bold text-white pb-5 lg:text-4xl lg:pb-6">:</span>
-                    )}
-                    <div className="flex flex-col items-center bg-black/40 rounded-md px-2 py-2 lg:px-4 lg:py-4">
-                      {/* suppressHydrationWarning: countdown value intentionally differs between SSR and client */}
-                      <span className="text-4xl font-bold text-white leading-none lg:text-6xl" suppressHydrationWarning>{unit.value}</span>
-                      <span className="text-[0.6rem] font-semibold text-gray-300 mt-1 tracking-widest lg:mt-2 lg:text-xs">{unit.label}</span>
-                    </div>
-                  </Fragment>
-                ))}
-              </div>
-            </>
-          )}
+          <div className={`${styles.eightFigure} ${styles.sleepEight}`}>
+            <p>8 HOURS SLEEP</p>
+            <div className={styles.eightLoop}>
+              <span className={styles.eightLoopInner}>
+                <MoonIcon aria-hidden="true" />
+              </span>
+            </div>
+            <div className={styles.eightLoop}>
+              <span className={styles.eightLoopInner}>
+                <strong>REST</strong>
+                <small>A HARD-WON RIGHT</small>
+              </span>
+            </div>
+          </div>
 
+          <div className={`${styles.eightFigure} ${styles.oursEight}`}>
+            <p>8 HOURS OUR OWN</p>
+            <div className={styles.eightLoop}>
+              <span className={styles.eightLoopInner}>
+                <SunIcon aria-hidden="true" />
+              </span>
+            </div>
+            <div className={styles.eightLoop}>
+              <span className={styles.eightLoopInner}>
+                <strong>OURS</strong>
+                <small>THE LONG WEEKEND</small>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.upcomingSection} aria-labelledby="upcoming-title">
+        <div className={styles.upcomingHeader}>
           <div>
-            <a
-              href={nextHoliday.infoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-black/70 text-white mt-5 mx-auto px-4 py-2 rounded-md flex items-center w-fit transition-colors hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60 lg:mt-8 lg:px-6 lg:py-3 lg:text-lg"
-            >
-              Learn more about {nextHoliday.name} <ArrowTopRightOnSquareIcon className="size-5 ml-1 lg:size-6" />
-            </a>
+            <p>KEEP AN EYE ON THE CALENDAR</p>
+            <h2 id="upcoming-title">Upcoming public holidays</h2>
           </div>
         </div>
-      </div>
 
-      <div className="p-4 text-white font-bold bg-slate-950 grow lg:px-16 lg:py-10">
-        <div className="mx-auto max-w-2xl">
-          <div className="lg:text-xl">
-            Upcoming NZ National Public Holidays
-          </div>
+        <div className={styles.holidayList}>{upcomingHolidays.map(renderHolidayRow)}</div>
 
-          <div className="mt-3 flex flex-col gap-2.5 lg:gap-3">
-            {upcomingHolidays.map(renderHolidayRow)}
-          </div>
-
-          {allUpcomingHolidays.length > upcomingHolidays.length && (
-            <button
-              type="button"
-              onClick={() => setShowAllHolidays(true)}
-              className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-2xl border border-white/10 bg-white/[0.03] p-3 text-xs font-bold tracking-wide text-gray-300 transition-colors hover:border-white/20 hover:bg-white/[0.06] hover:text-white active:bg-white/10 lg:mt-4 lg:p-4 lg:text-sm"
-            >
-              Show next {allUpcomingHolidays.length} holidays
-              <ChevronRightIcon className="size-3.5" />
-            </button>
-          )}
-        </div>
-      </div>
+        {allUpcomingHolidays.length > upcomingHolidays.length && (
+          <button
+            type="button"
+            className={styles.showMoreButton}
+            onClick={() => setShowAllHolidays(true)}
+          >
+            Show next {allUpcomingHolidays.length} holidays
+            <ChevronRightIcon aria-hidden="true" />
+          </button>
+        )}
+      </section>
 
       {showAllHolidays && (
-        <div
-          className="fixed inset-0 z-50 flex items-end justify-center sm:items-center"
-          role="dialog"
-          aria-modal="true"
-          aria-label={`Next ${allUpcomingHolidays.length} public holidays`}
-        >
-          <div
-            className="absolute inset-0 bg-black/70"
+        <div className={styles.dialogShell} role="dialog" aria-modal="true" aria-label="Next public holidays">
+          <button
+            className={styles.dialogBackdrop}
+            type="button"
+            aria-label="Close holiday list"
             onClick={() => setShowAllHolidays(false)}
           />
-
-          <div className="relative z-10 flex max-h-[85vh] w-full flex-col rounded-t-3xl border-t border-white/10 bg-slate-950 sm:max-w-md sm:rounded-3xl sm:border lg:max-w-xl">
-            <div className="flex shrink-0 items-center justify-between border-b border-white/10 p-4 lg:px-6 lg:py-5">
-              <div className="text-sm font-bold text-white lg:text-base">
-                Next {allUpcomingHolidays.length} Public Holidays
+          <div className={styles.dialogPanel}>
+            <div className={styles.dialogHeader}>
+              <div>
+                <span>UP NEXT</span>
+                <h2>Next {allUpcomingHolidays.length} public holidays</h2>
               </div>
-              <button
-                type="button"
-                onClick={() => setShowAllHolidays(false)}
-                aria-label="Close"
-                className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white/5 text-white transition-colors hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white/40 active:bg-white/15"
-              >
-                <XMarkIcon className="size-5" />
+              <button type="button" aria-label="Close" onClick={() => setShowAllHolidays(false)}>
+                <XMarkIcon aria-hidden="true" />
               </button>
             </div>
-
-            <div className="flex flex-col gap-2.5 overflow-y-auto p-4 lg:gap-3 lg:p-6">
-              {allUpcomingHolidays.map(renderHolidayRow)}
-            </div>
+            <div className={styles.dialogList}>{allUpcomingHolidays.map(renderHolidayRow)}</div>
           </div>
         </div>
       )}
