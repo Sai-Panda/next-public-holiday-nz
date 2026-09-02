@@ -16,6 +16,7 @@ Build and maintain a beautiful Next.js app that shows countdowns for the next Ne
 - Preserve type safety; avoid `any` unless there is no safer alternative.
 - Prefer server-first/data-fetching patterns that fit modern Next.js guidance.
 - Keep UX mobile-first, simple, fast, and polished on larger screens too.
+- Do not generate, create, add, or use AI-generated images or artwork in this project. Use only existing project assets or appropriately licensed, human-created imagery with clear provenance. If suitable imagery is unavailable, ask before proposing an alternative.
 
 ## Code style
 - Use clear names over clever shortcuts.
