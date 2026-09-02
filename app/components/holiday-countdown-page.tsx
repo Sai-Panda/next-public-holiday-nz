@@ -81,6 +81,7 @@ export default function HolidayCountdownPage({
   }
 
   const nextHoliday = nextOccurrence.holiday;
+  const isLabourDay = nextHoliday.name === "Labour Day";
   const countdown = getCountdownParts(nextOccurrence.date, now);
   const countdownValues = formatCountdownValues(countdown);
   const upcomingHolidays = holidayOccurrences.slice(1, UPCOMING_LIST_LIMIT + 1);
@@ -114,7 +115,7 @@ export default function HolidayCountdownPage({
 
   return (
     <main className={styles.page}>
-      <section className={styles.hero}>
+      <section className={`${styles.hero} ${isLabourDay ? "" : styles.genericHero}`}>
         <div className={styles.heroCopy}>
           <div className={styles.siteMark}>
             <span>AOTEAROA</span>
@@ -128,7 +129,7 @@ export default function HolidayCountdownPage({
             {getReadableDate(nextOccurrence.date)}
           </time>
 
-          <div className={styles.countdown} aria-label="Countdown to Labour Day">
+          <div className={styles.countdown} aria-label={`Countdown to ${nextHoliday.name}`}>
             {[
               [countdownValues[0], "DAYS"],
               [countdownValues[1], "HOURS"],
@@ -151,56 +152,58 @@ export default function HolidayCountdownPage({
             target="_blank"
             rel="noopener noreferrer"
           >
-            Why we get the day off <span aria-hidden="true">→</span>
+            {isLabourDay ? "Why we get the day off" : `Learn more about ${nextHoliday.name}`} <span aria-hidden="true">→</span>
           </a>
         </div>
 
-        <div className={styles.eightStage} aria-label="Eight hours work, eight hours sleep, eight hours our own">
-          <div className={`${styles.eightFigure} ${styles.workEight}`}>
-            <p>8 HOURS WORK</p>
-            <div className={styles.eightLoop}>
-              <span className={styles.eightLoopInner}>
-                <BriefcaseIcon aria-hidden="true" />
-              </span>
+        {isLabourDay && (
+          <div className={styles.eightStage} aria-label="Eight hours work, eight hours sleep, eight hours our own">
+            <div className={`${styles.eightFigure} ${styles.workEight}`}>
+              <p>8 HOURS WORK</p>
+              <div className={styles.eightLoop}>
+                <span className={styles.eightLoopInner}>
+                  <BriefcaseIcon aria-hidden="true" />
+                </span>
+              </div>
+              <div className={styles.eightLoop}>
+                <span className={styles.eightLoopInner}>
+                  <strong>WORK</strong>
+                  <small>8 HOURS</small>
+                </span>
+              </div>
             </div>
-            <div className={styles.eightLoop}>
-              <span className={styles.eightLoopInner}>
-                <strong>WORK</strong>
-                <small>8 HOURS</small>
-              </span>
-            </div>
-          </div>
 
-          <div className={`${styles.eightFigure} ${styles.sleepEight}`}>
-            <p>8 HOURS SLEEP</p>
-            <div className={styles.eightLoop}>
-              <span className={styles.eightLoopInner}>
-                <MoonIcon aria-hidden="true" />
-              </span>
+            <div className={`${styles.eightFigure} ${styles.sleepEight}`}>
+              <p>8 HOURS SLEEP</p>
+              <div className={styles.eightLoop}>
+                <span className={styles.eightLoopInner}>
+                  <MoonIcon aria-hidden="true" />
+                </span>
+              </div>
+              <div className={styles.eightLoop}>
+                <span className={styles.eightLoopInner}>
+                  <strong>REST</strong>
+                  <small>A HARD-WON RIGHT</small>
+                </span>
+              </div>
             </div>
-            <div className={styles.eightLoop}>
-              <span className={styles.eightLoopInner}>
-                <strong>REST</strong>
-                <small>A HARD-WON RIGHT</small>
-              </span>
-            </div>
-          </div>
 
-          <div className={`${styles.eightFigure} ${styles.oursEight}`}>
-            <p>8 HOURS OUR OWN</p>
-            <div className={styles.eightLoop}>
-              <span className={styles.eightLoopInner}>
-                <SunIcon aria-hidden="true" />
-              </span>
-            </div>
-            <div className={styles.eightLoop}>
-              <span className={styles.eightLoopInner}>
-                <strong>OURS</strong>
-                <small>THE LONG WEEKEND</small>
-              </span>
+            <div className={`${styles.eightFigure} ${styles.oursEight}`}>
+              <p>8 HOURS OUR OWN</p>
+              <div className={styles.eightLoop}>
+                <span className={styles.eightLoopInner}>
+                  <SunIcon aria-hidden="true" />
+                </span>
+              </div>
+              <div className={styles.eightLoop}>
+                <span className={styles.eightLoopInner}>
+                  <strong>OURS</strong>
+                  <small>THE LONG WEEKEND</small>
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </section>
 
       <section className={styles.upcomingSection} aria-labelledby="upcoming-title">

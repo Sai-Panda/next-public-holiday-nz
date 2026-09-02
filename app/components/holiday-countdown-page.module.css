@@ -35,6 +35,14 @@
   pointer-events: none;
 }
 
+.genericHero {
+  grid-template-columns: 1fr;
+}
+
+.genericHero::after {
+  display: none;
+}
+
 .heroCopy {
   position: relative;
   z-index: 2;
@@ -471,7 +479,7 @@
   text-align: center;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1150px) {
   .hero {
     grid-template-columns: 1fr;
   }
@@ -498,7 +506,7 @@
   }
 }
 
-@media (min-width: 721px) and (max-width: 1100px) {
+@media (min-width: 721px) and (max-width: 1150px) {
   .heroCopy {
     min-height: min(75vh, 650px);
     padding-top: clamp(90px, 12vh, 130px);
