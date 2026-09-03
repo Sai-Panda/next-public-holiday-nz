@@ -25,6 +25,11 @@
 - Labour Day uses an intentionally image-free graphic system for a lightweight page; AI-generated photography is not a production asset.
 - Keep the experience single-purpose: no navigation bar and no add-to-calendar control.
 - Keep historical context terse on-page; link to the authoritative holiday source instead of adding explanatory sections.
+- Christmas Day uses pōhutukawa crimson, high-summer coastal colour, and a
+  replaceable hero-image placeholder; avoid Northern Hemisphere winter motifs.
+- Christmas uses the Coast & Canopy direction as the single production design.
+- Use verified te reo Māori such as “Meri Kirihimete”, but do not invent culturally
+  specific decorative patterns without review.
 
 ## Update rule
 When project direction changes, update this file in the same PR so future Copilot sessions inherit the latest context.

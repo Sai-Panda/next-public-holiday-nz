@@ -11,10 +11,9 @@ export default async function Dev({ searchParams }: DevPageProps) {
   const simulatedNow = date ? getTime(date) : undefined;
   const validSimulatedNow =
     simulatedNow !== undefined && !isNaN(simulatedNow) ? simulatedNow : undefined;
-
-    if (process.env.NODE_ENV === 'production') {
-        return notFound();
-    }
+  if (process.env.NODE_ENV === "production") {
+    return notFound();
+  }
 
   return <HolidayCountdownPage simulatedNow={validSimulatedNow} />;
 }
