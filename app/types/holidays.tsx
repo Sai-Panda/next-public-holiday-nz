@@ -86,6 +86,11 @@ export const holidays: Holiday[] = [
     dates: ["2026-12-25", "2027-12-27", "2028-12-25"],
     infoUrl: "https://nzhistory.govt.nz/culture/kiwi-christmas",
     emoji: GiftIcon,
+    theme: {
+      // Pōhutukawa crimson: its blazing December flowers make the native tree
+      // the defining symbol of a Kiwi Christmas.
+      accentColor: "#dc2626",
+    },
   },
   {
     name: "Boxing Day",

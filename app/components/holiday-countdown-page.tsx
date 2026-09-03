@@ -1,6 +1,7 @@
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
+import { CSSProperties, Fragment, useEffect, useState } from "react";
+import Image from "next/image";
 import {
   ArrowTopRightOnSquareIcon,
   BriefcaseIcon,
@@ -17,6 +18,8 @@ import {
   HolidayOccurrence,
 } from "../util/holiday.util";
 import styles from "./holiday-countdown-page.module.css";
+import { PhotoCredit } from "./photo-credit";
+import pohutukawaImage from "../../public/pohutukawa-christmas.jpg";
 
 const UPCOMING_LIST_LIMIT = 4;
 const UPCOMING_OVERLAY_LIMIT = 10;
@@ -82,6 +85,7 @@ export default function HolidayCountdownPage({
 
   const nextHoliday = nextOccurrence.holiday;
   const isLabourDay = nextHoliday.name === "Labour Day";
+  const isChristmasDay = nextHoliday.name === "Christmas Day";
   const countdown = getCountdownParts(nextOccurrence.date, now);
   const countdownValues = formatCountdownValues(countdown);
   const upcomingHolidays = holidayOccurrences.slice(1, UPCOMING_LIST_LIMIT + 1);
@@ -90,9 +94,18 @@ export default function HolidayCountdownPage({
   const renderHolidayRow = (occurrence: HolidayOccurrence) => {
     const rowCountdown = getCountdownParts(occurrence.date, now);
     const [days, hours, minutes, seconds] = formatCountdownValues(rowCountdown);
+    const accentColor = occurrence.holiday.theme?.accentColor;
 
     return (
-      <article className={styles.holidayRow} key={`${occurrence.holiday.name}-${occurrence.date}`}>
+      <article
+        className={`${styles.holidayRow} ${accentColor ? styles.themedHolidayRow : ""}`}
+        key={`${occurrence.holiday.name}-${occurrence.date}`}
+        style={
+          accentColor
+            ? ({ "--row-accent": accentColor } as CSSProperties)
+            : undefined
+        }
+      >
         <div>
           <a
             href={occurrence.holiday.infoUrl}
@@ -113,9 +126,19 @@ export default function HolidayCountdownPage({
     );
   };
 
+  const heroClassName = isLabourDay
+    ? styles.hero
+      : isChristmasDay
+      ? `${styles.hero} ${styles.christmasHero} ${styles.christmasCoastal}`
+      : `${styles.hero} ${styles.genericHero}`;
+
+  const pageStyle = {
+    "--holiday-accent": nextHoliday.theme?.accentColor ?? "#df3b20",
+  } as CSSProperties;
+
   return (
-    <main className={styles.page}>
-      <section className={`${styles.hero} ${isLabourDay ? "" : styles.genericHero}`}>
+    <main className={styles.page} style={pageStyle}>
+      <section className={heroClassName}>
         <div className={styles.heroCopy}>
           <div className={styles.siteMark}>
             <span>AOTEAROA</span>
@@ -123,7 +146,9 @@ export default function HolidayCountdownPage({
             <span>PUBLIC HOLIDAY COUNTDOWN</span>
           </div>
 
-          <p className={styles.eyebrow}>NEXT PUBLIC HOLIDAY — AOTEAROA NEW ZEALAND</p>
+          <p className={styles.eyebrow}>
+            NEXT PUBLIC HOLIDAY — AOTEAROA NEW ZEALAND
+          </p>
           <h1>{nextHoliday.name}</h1>
           <time className={styles.heroDate} dateTime={nextOccurrence.date}>
             {getReadableDate(nextOccurrence.date)}
@@ -152,9 +177,50 @@ export default function HolidayCountdownPage({
             target="_blank"
             rel="noopener noreferrer"
           >
-            {isLabourDay ? "Why we get the day off" : `Learn more about ${nextHoliday.name}`} <span aria-hidden="true">→</span>
+            {isLabourDay
+              ? "Why we get the day off"
+              : isChristmasDay
+                ? "The story of a Kiwi Christmas"
+                : `Learn more about ${nextHoliday.name}`} {" "}
+            <span aria-hidden="true">→</span>
           </a>
+
         </div>
+
+        {isChristmasDay && (
+          <div className={styles.christmasStage}>
+            <div className={styles.christmasStamp} aria-label="Meri Kirihimete, Christmas in Aotearoa">
+              <span>MERI</span>
+              <strong>KIRIHIMETE</strong>
+              <small>AOTEAROA • 25 DECEMBER</small>
+            </div>
+
+            <div className={`${styles.pohutukawaPlaceholder} ${styles.pohutukawaPhotoFrame}`}>
+                <Image
+                  src={pohutukawaImage}
+                  alt="Two pōhutukawa trees covered in crimson flowers beside the water at Cornwallis Beach, West Auckland"
+                  fill
+                  priority
+                  sizes="(max-width: 1150px) 100vw, 55vw"
+                  className={styles.pohutukawaPhoto}
+                />
+                <div className={styles.photoGradient} aria-hidden="true" />
+                <div className={styles.photoLabel}>
+                  <span>PŌHUTUKAWA SEASON</span>
+                  <strong>CORNWALLIS BEACH · WEST AUCKLAND</strong>
+                </div>
+                <PhotoCredit
+                  photographer="WikiImages"
+                  href="https://pixabay.com/photos/tree-blossom-bloom-red-flowers-red-141884/"
+                />
+            </div>
+
+            <p className={styles.christmasCaption}>
+              <strong>NEW ZEALAND’S CHRISTMAS TREE</strong>
+              <span>Salt air, summer light, and a pōhutukawa in bloom.</span>
+            </p>
+          </div>
+        )}
 
         {isLabourDay && (
           <div className={styles.eightStage} aria-label="Eight hours work, eight hours sleep, eight hours our own">
