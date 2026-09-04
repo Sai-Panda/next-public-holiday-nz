@@ -88,8 +88,17 @@ export const getUpcomingHolidayOccurrences = (
   limit: number,
 ) => {
   return getHolidayOccurrences(holidays)
-    .filter((occurrence) => getTime(nextNzDateString(occurrence.date)) > now)
+    .filter((occurrence) => getTime(occurrence.date) > now)
     .slice(0, limit);
+};
+
+export const getCurrentHolidayOccurrences = (holidays: Holiday[], now: number) => {
+  return getHolidayOccurrences(holidays).filter((occurrence) => {
+    const start = getTime(occurrence.date);
+    const end = getTime(nextNzDateString(occurrence.date));
+
+    return start <= now && now < end;
+  });
 };
 
 export const getCountdownParts = (date: string, now: number): CountdownParts => {

@@ -4,6 +4,7 @@ import { holidays as realHolidays } from "../types/holidays";
 import {
   formatCountdownValues,
   getCountdownParts,
+  getCurrentHolidayOccurrences,
   getHolidayOccurrences,
   getTime,
   getUpcomingHolidayOccurrences,
@@ -60,20 +61,19 @@ describe("getUpcomingHolidayOccurrences", () => {
     holiday("Boxing Day", ["2026-12-28"]),
   ];
 
-  it("keeps today's holiday as the next occurrence for the whole NZ day it falls on", () => {
+  it("moves to the next occurrence when a holiday begins", () => {
     const startOfDay = getTime("2026-12-25");
     const tenAm = startOfDay + 10 * 60 * 60 * 1000;
     const lastSecondOfDay = getTime("2026-12-26") - 1000;
 
     for (const now of [startOfDay, tenAm, lastSecondOfDay]) {
       const [next] = getUpcomingHolidayOccurrences(holidays, now, 1);
-      expect(next.holiday.name).toBe("Christmas Day");
+      expect(next.holiday.name).toBe("Boxing Day");
     }
   });
 
-  it("moves on to the next holiday once NZ midnight passes on the day after", () => {
-    const [next] = getUpcomingHolidayOccurrences(holidays, getTime("2026-12-26"), 1);
-    expect(next.holiday.name).toBe("Boxing Day");
+  it("does not return a holiday once every occurrence has begun", () => {
+    expect(getUpcomingHolidayOccurrences(holidays, getTime("2026-12-29"), 1)).toEqual([]);
   });
 
   it("does not surface a holiday before its NZ day has started", () => {
@@ -85,6 +85,27 @@ describe("getUpcomingHolidayOccurrences", () => {
   it("returns an empty list once every holiday's NZ day has passed", () => {
     const afterEverything = getTime("2026-12-29");
     expect(getUpcomingHolidayOccurrences(holidays, afterEverything, 1)).toEqual([]);
+  });
+});
+
+describe("getCurrentHolidayOccurrences", () => {
+  const holidays: Holiday[] = [
+    holiday("Christmas Day", ["2026-12-25"]),
+    holiday("Boxing Day", ["2026-12-28"]),
+  ];
+
+  it("returns today's holiday for the whole NZ calendar day", () => {
+    const startOfDay = getTime("2026-12-25");
+    const lastSecondOfDay = getTime("2026-12-26") - 1000;
+
+    for (const now of [startOfDay, lastSecondOfDay]) {
+      const [current] = getCurrentHolidayOccurrences(holidays, now);
+      expect(current?.holiday.name).toBe("Christmas Day");
+    }
+  });
+
+  it("returns no current holiday outside an NZ holiday day", () => {
+    expect(getCurrentHolidayOccurrences(holidays, getTime("2026-12-26"))).toEqual([]);
   });
 });
 
@@ -205,17 +226,17 @@ describe("today state across every real holiday occurrence", () => {
       expect(getCountdownParts(occurrence.date, endOfDay).done).toBe(true);
     });
 
-    it(`${label}: is surfaced as the next occurrence throughout its own NZ day`, () => {
+    it(`${label}: is surfaced as the current occurrence throughout its own NZ day`, () => {
       for (const now of [startOfDay, endOfDay]) {
-        const [next] = getUpcomingHolidayOccurrences(realHolidays, now, 1);
-        expect(next?.holiday.name).toBe(occurrence.holiday.name);
-        expect(next?.date).toBe(occurrence.date);
+        const [current] = getCurrentHolidayOccurrences(realHolidays, now);
+        expect(current?.holiday.name).toBe(occurrence.holiday.name);
+        expect(current?.date).toBe(occurrence.date);
       }
     });
 
-    it(`${label}: hands off correctly once its NZ day ends`, () => {
+    it(`${label}: hands off to the following occurrence when its NZ day begins`, () => {
       const following = occurrences[index + 1];
-      const [next] = getUpcomingHolidayOccurrences(realHolidays, endOfDay + 1, 1);
+      const [next] = getUpcomingHolidayOccurrences(realHolidays, startOfDay, 1);
 
       if (following) {
         expect(next?.holiday.name).toBe(following.holiday.name);

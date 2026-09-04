@@ -11,6 +11,38 @@
   background: var(--canvas);
 }
 
+.todayBanner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 18px;
+  align-items: center;
+  min-height: 68px;
+  padding: 12px clamp(28px, 4vw, 70px);
+  color: var(--ink-deep);
+  background: var(--today-holiday-accent);
+}
+
+.todayBanner span,
+.todayBanner p {
+  margin: 0;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.66rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.todayBanner strong {
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  letter-spacing: -0.03em;
+}
+
+.todayBanner p {
+  color: color-mix(in srgb, var(--ink-deep) 78%, transparent);
+  text-align: right;
+}
+
 .hero {
   position: relative;
   display: grid;
@@ -811,6 +843,24 @@
 }
 
 @media (max-width: 720px) {
+  .todayBanner {
+    grid-template-columns: 1fr auto;
+    gap: 4px 16px;
+    min-height: 82px;
+    padding: 12px 22px;
+  }
+
+  .todayBanner strong {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .todayBanner p {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 0.56rem;
+  }
+
   .heroCopy {
     min-height: 640px;
     padding: 112px 22px 50px;
