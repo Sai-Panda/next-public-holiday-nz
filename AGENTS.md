@@ -9,3 +9,4 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - Primary coding instructions for GitHub Copilot live in `.github/copilot-instructions.md`.
 - Ongoing product context and current focus live in `.github/copilot-context.md`.
 - Before making non-trivial changes, read both files and align changes with the "Current focus" and "Constraints" sections.
+- Asset rule: AI-generated logos are permitted; AI-generated images and artwork are not. For imagery and artwork, use existing project assets or appropriately licensed, human-created work with clear provenance.

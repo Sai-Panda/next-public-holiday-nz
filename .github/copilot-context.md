@@ -33,6 +33,9 @@
 - Boxing Day uses the image-free Unwrapped Christmas Box direction: bright summer
   turquoise, a lifted lid, and a bold ribbon. Avoid northern-winter motifs and
   retail-sale imagery.
+- New Year's Day uses the image-free First Light direction: a dawn-gold sun,
+  abstract horizon, and restrained sparkles that reflect Aotearoa's early start
+  to the new day. Keep it separate from Matariki and Māori visual language.
 - When a holiday is observed on a different day, show both the observed date and
   the holiday's actual calendar date wherever dates are presented.
 

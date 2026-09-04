@@ -7,6 +7,7 @@ import {
   BriefcaseIcon,
   ChevronRightIcon,
   MoonIcon,
+  SparklesIcon,
   SunIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
@@ -100,6 +101,7 @@ export default function HolidayCountdownPage({
     ? getActualDate(currentOccurrence)
     : undefined;
   const isLabourDay = nextHoliday.name === "Labour Day";
+  const isNewYearsDay = nextHoliday.name === "New Year's Day";
   const isChristmasDay = nextHoliday.name === "Christmas Day";
   const isBoxingDay = nextHoliday.name === "Boxing Day";
   const countdown = getCountdownParts(nextOccurrence.date, now);
@@ -153,6 +155,8 @@ export default function HolidayCountdownPage({
 
   const heroClassName = isLabourDay
     ? styles.hero
+    : isNewYearsDay
+      ? `${styles.hero} ${styles.newYearHero}`
       : isChristmasDay
       ? `${styles.hero} ${styles.christmasHero} ${styles.christmasCoastal}`
       : isBoxingDay
@@ -318,6 +322,29 @@ export default function HolidayCountdownPage({
                 </span>
               </div>
             </div>
+          </div>
+        )}
+
+        {isNewYearsDay && (
+          <div
+            className={styles.newYearStage}
+            role="img"
+            aria-label="A low golden sun rising over an abstract horizon, representing first light in Aotearoa"
+          >
+            <div className={styles.newYearSun} aria-hidden="true" />
+            <div className={styles.newYearHorizon} aria-hidden="true" />
+            <SparklesIcon
+              className={`${styles.newYearSparkle} ${styles.newYearSparkleOne}`}
+              aria-hidden="true"
+            />
+            <SparklesIcon
+              className={`${styles.newYearSparkle} ${styles.newYearSparkleTwo}`}
+              aria-hidden="true"
+            />
+            <p className={styles.newYearCaption}>
+              <strong>FIRST LIGHT</strong>
+              <span>A NEW YEAR IN AOTEAROA</span>
+            </p>
           </div>
         )}
 

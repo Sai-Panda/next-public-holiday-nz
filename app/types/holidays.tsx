@@ -21,8 +21,12 @@ export const holidays: Holiday[] = [
       "2028-01-03": "2028-01-01",
     },
     infoUrl: "https://publicholidays.co.nz/new-years-day/",
-    // Fireworks/confetti at midnight.
+    // First light gold: the Chatham Islands see the day's first sunrise ahead
+    // of mainland New Zealand, giving the Gregorian new year an NZ-specific dawn cue.
     emoji: SparklesIcon,
+    theme: {
+      accentColor: "#fbbf24",
+    },
   },
   {
     name: "Day after New Year's Day",
