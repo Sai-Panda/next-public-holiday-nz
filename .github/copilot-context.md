@@ -30,6 +30,11 @@
 - Christmas uses the Coast & Canopy direction as the single production design.
 - Use verified te reo Māori such as “Meri Kirihimete”, but do not invent culturally
   specific decorative patterns without review.
+- Boxing Day uses the image-free Unwrapped Christmas Box direction: bright summer
+  turquoise, a lifted lid, and a bold ribbon. Avoid northern-winter motifs and
+  retail-sale imagery.
+- When a holiday is observed on a different day, show both the observed date and
+  the holiday's actual calendar date wherever dates are presented.
 
 ## Update rule
 When project direction changes, update this file in the same PR so future Copilot sessions inherit the latest context.

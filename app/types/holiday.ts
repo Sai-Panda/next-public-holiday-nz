@@ -3,6 +3,9 @@ export type Holiday = {
   dates: string[];
   // Required so every holiday has a "Learn more about" link (see issue #11).
   infoUrl: string;
+  // The app counts down to observed dates. When an observation is moved from
+  // the holiday's calendar date, retain that actual date for clear display.
+  actualDateByObservedDate?: Record<string, string>;
   theme?: HolidayTheme;
   emoji?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 };

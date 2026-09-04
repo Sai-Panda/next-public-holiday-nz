@@ -288,6 +288,106 @@
   border-left: 1px solid rgb(255 248 233 / 45%);
 }
 
+.boxingHero {
+  --red: var(--holiday-accent);
+  min-height: 700px;
+  grid-template-columns: minmax(430px, 0.92fr) minmax(600px, 1.08fr);
+  background:
+    radial-gradient(circle at 18% 22%, rgb(255 255 255 / 7%) 0 1px, transparent 1px 100%),
+    linear-gradient(145deg, #063f4b 0%, #062f39 58%, #031f28 100%);
+  background-size: 7px 7px, auto;
+}
+
+.boxingHero::before {
+  position: absolute;
+  top: -110px;
+  left: -120px;
+  width: 320px;
+  aspect-ratio: 1;
+  border: 70px solid color-mix(in srgb, var(--holiday-accent) 88%, #057086);
+  border-radius: 50%;
+  content: "";
+  opacity: 0.92;
+  pointer-events: none;
+}
+
+.boxingHero::after {
+  inset: 0 0 0 45%;
+  background:
+    linear-gradient(115deg, transparent 0 7%, #f1e6d0 7.15% 100%),
+    radial-gradient(circle at 70% 30%, rgb(8 35 49 / 8%) 0 1px, transparent 1px 100%);
+  background-size: auto, 8px 8px;
+}
+
+.boxingHero .heroCopy {
+  padding-right: clamp(36px, 4.5vw, 78px);
+}
+
+.boxingHero .siteMark span:last-child,
+.boxingHero .eyebrow {
+  color: #a8e9ee;
+}
+
+.boxingHero .heroCopy h1 {
+  max-width: 650px;
+  font-size: clamp(4.5rem, 7.8vw, 8.2rem);
+  line-height: 0.82;
+}
+
+.boxingHero .heroDate {
+  border-color: var(--holiday-accent);
+  color: #d7f5f4;
+}
+
+.boxingHero .countdownDivider {
+  color: color-mix(in srgb, var(--holiday-accent) 62%, white);
+}
+
+.boxingHero .historyLink {
+  border-color: #a8e9ee;
+  color: #a8e9ee;
+}
+
+.boxingStage {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-width: 0;
+  place-items: center;
+  padding: 86px clamp(32px, 4vw, 72px) 58px clamp(86px, 7vw, 128px);
+}
+
+.boxingParcel {
+  position: relative;
+  display: grid;
+  width: min(620px, 100%);
+  aspect-ratio: 1 / 0.78;
+  place-items: center;
+  margin-top: 56px;
+  border: 10px solid #e9f8f3;
+  background:
+    linear-gradient(90deg, transparent 45%, rgb(215 245 244 / 44%) 45% 55%, transparent 55%),
+    #0891b2;
+  box-shadow:
+    20px 22px 0 #075461,
+    30px 32px 0 #f2b34d;
+  transform: rotate(-3deg);
+}
+
+.boxingLid {
+  position: absolute;
+  top: -20%;
+  left: -13%;
+  width: 126%;
+  height: 23%;
+  border: 10px solid #e9f8f3;
+  background:
+    linear-gradient(90deg, transparent 45%, rgb(215 245 244 / 44%) 45% 55%, transparent 55%),
+    #087c96;
+  box-shadow: 8px 10px 0 rgb(3 48 57 / 35%);
+  transform: rotate(11deg);
+}
+
 .heroCopy {
   position: relative;
   z-index: 2;
@@ -360,6 +460,25 @@
   font-weight: 850;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.actualDateNote {
+  margin: 10px 0 0;
+  color: rgb(250 244 232 / 78%);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.actualDateNote time {
+  color: var(--canvas-light);
+}
+
+.actualDateNote + .countdown {
+  margin-top: 20px;
 }
 
 .countdown {
@@ -602,6 +721,16 @@
   font-size: 0.7rem;
 }
 
+.holidayRow .actualHolidayDate {
+  margin-top: 3px;
+  color: rgb(250 244 232 / 78%);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .rowCountdown {
   flex: 0 0 auto;
   color: var(--canvas-light);
@@ -769,6 +898,13 @@
     background-size: 7px 7px, auto;
   }
 
+  .boxingHero .heroCopy {
+    background:
+      radial-gradient(circle at 20% 20%, rgb(255 255 255 / 7%) 0 1px, transparent 1px 100%),
+      linear-gradient(145deg, #063f4b 0%, #062f39 58%, #031f28 100%);
+    background-size: 7px 7px, auto;
+  }
+
   .christmasCoastal .heroCopy h1 {
     max-width: 100%;
   }
@@ -781,6 +917,14 @@
     background-size: 8px 8px, auto;
   }
 
+  .boxingStage {
+    padding: 72px clamp(46px, 9vw, 100px) 76px;
+    background:
+      radial-gradient(circle at 70% 30%, rgb(8 35 49 / 7%) 0 1px, transparent 1px 100%),
+      #f1e6d0;
+    background-size: 8px 8px, auto;
+  }
+
   .christmasStamp {
     top: 48px;
     right: clamp(20px, 5vw, 64px);
@@ -790,6 +934,7 @@
     right: clamp(36px, 8vw, 88px);
     bottom: 28px;
   }
+
 }
 
 @media (min-width: 721px) and (max-width: 1150px) {
@@ -879,7 +1024,15 @@
     min-height: 560px;
   }
 
+  .boxingHero .heroCopy {
+    min-height: 560px;
+  }
+
   .christmasHero .heroCopy h1 {
+    font-size: clamp(3.35rem, 15.6vw, 5.2rem);
+  }
+
+  .boxingHero .heroCopy h1 {
     font-size: clamp(3.35rem, 15.6vw, 5.2rem);
   }
 
@@ -908,6 +1061,22 @@
 
   .christmasStage {
     padding: 54px 18px 70px;
+  }
+
+  .boxingStage {
+    padding: 80px 34px 88px;
+  }
+
+  .boxingParcel {
+    width: min(440px, 84%);
+    border-width: 7px;
+    box-shadow:
+      10px 12px 0 #075461,
+      17px 19px 0 #f2b34d;
+  }
+
+  .boxingLid {
+    border-width: 7px;
   }
 
   .pohutukawaPlaceholder {

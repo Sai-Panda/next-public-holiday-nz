@@ -38,6 +38,9 @@ const getReadableDate = (dateString: string) =>
     timeZone: "Pacific/Auckland",
   });
 
+const getActualDate = (occurrence: HolidayOccurrence) =>
+  occurrence.holiday.actualDateByObservedDate?.[occurrence.date];
+
 const getTodayMessage = (holidayName: string) => {
   if (holidayName === "Christmas Day") return "Meri Kirihimete";
 
@@ -92,8 +95,13 @@ export default function HolidayCountdownPage({
   }
 
   const nextHoliday = nextOccurrence.holiday;
+  const nextActualDate = getActualDate(nextOccurrence);
+  const currentActualDate = currentOccurrence
+    ? getActualDate(currentOccurrence)
+    : undefined;
   const isLabourDay = nextHoliday.name === "Labour Day";
   const isChristmasDay = nextHoliday.name === "Christmas Day";
+  const isBoxingDay = nextHoliday.name === "Boxing Day";
   const countdown = getCountdownParts(nextOccurrence.date, now);
   const countdownValues = formatCountdownValues(countdown);
   const upcomingHolidays = holidayOccurrences.slice(1, UPCOMING_LIST_LIMIT + 1);
@@ -103,6 +111,7 @@ export default function HolidayCountdownPage({
     const rowCountdown = getCountdownParts(occurrence.date, now);
     const [days, hours, minutes, seconds] = formatCountdownValues(rowCountdown);
     const accentColor = occurrence.holiday.theme?.accentColor;
+    const actualDate = getActualDate(occurrence);
 
     return (
       <article
@@ -124,7 +133,15 @@ export default function HolidayCountdownPage({
             {occurrence.holiday.name}
             <ArrowTopRightOnSquareIcon aria-hidden="true" />
           </a>
-          <time dateTime={occurrence.date}>{getReadableDate(occurrence.date)}</time>
+          <time dateTime={occurrence.date}>
+            {actualDate ? "Observed · " : ""}
+            {getReadableDate(occurrence.date)}
+          </time>
+          {actualDate && (
+            <time className={styles.actualHolidayDate} dateTime={actualDate}>
+              Actual date · {getReadableDate(actualDate)}
+            </time>
+          )}
         </div>
         <div className={styles.rowCountdown} suppressHydrationWarning>
           <span>IN</span>
@@ -138,6 +155,8 @@ export default function HolidayCountdownPage({
     ? styles.hero
       : isChristmasDay
       ? `${styles.hero} ${styles.christmasHero} ${styles.christmasCoastal}`
+      : isBoxingDay
+        ? `${styles.hero} ${styles.boxingHero}`
       : `${styles.hero} ${styles.genericHero}`;
 
   const pageStyle = {
@@ -155,7 +174,9 @@ export default function HolidayCountdownPage({
           <span>Today in Aotearoa</span>
           <strong>{currentOccurrence.holiday.name}</strong>
           <p>
-            {getReadableDate(currentOccurrence.date)} · {getTodayMessage(currentOccurrence.holiday.name)}
+            {currentActualDate ? "Observed · " : ""}
+            {getReadableDate(currentOccurrence.date)}
+            {currentActualDate && ` · Actual date: ${getReadableDate(currentActualDate)}`} · {getTodayMessage(currentOccurrence.holiday.name)}
           </p>
         </section>
       )}
@@ -172,8 +193,14 @@ export default function HolidayCountdownPage({
           </p>
           <h1>{nextHoliday.name}</h1>
           <time className={styles.heroDate} dateTime={nextOccurrence.date}>
+            {nextActualDate ? "Observed · " : ""}
             {getReadableDate(nextOccurrence.date)}
           </time>
+          {nextActualDate && (
+            <p className={styles.actualDateNote}>
+              Actual date · <time dateTime={nextActualDate}>{getReadableDate(nextActualDate)}</time>
+            </p>
+          )}
 
           <div className={styles.countdown} aria-label={`Countdown to ${nextHoliday.name}`}>
             {[
@@ -202,6 +229,8 @@ export default function HolidayCountdownPage({
               ? "Why we get the day off"
               : isChristmasDay
                 ? "The story of a Kiwi Christmas"
+                : isBoxingDay
+                  ? "The story behind Boxing Day"
                 : `Learn more about ${nextHoliday.name}`} {" "}
             <span aria-hidden="true">→</span>
           </a>
@@ -288,6 +317,18 @@ export default function HolidayCountdownPage({
                   <small>THE LONG WEEKEND</small>
                 </span>
               </div>
+            </div>
+          </div>
+        )}
+
+        {isBoxingDay && (
+          <div
+            className={styles.boxingStage}
+            role="img"
+            aria-label="An abstract Christmas box, representing Boxing Day's tradition of gifts and gratuities for workers"
+          >
+            <div className={styles.boxingParcel}>
+              <div className={styles.boxingLid} aria-hidden="true" />
             </div>
           </div>
         )}
