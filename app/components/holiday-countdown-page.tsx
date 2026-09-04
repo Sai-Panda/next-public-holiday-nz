@@ -14,6 +14,7 @@ import { holidays } from "../types/holidays";
 import {
   formatCountdownValues,
   getCountdownParts,
+  getCurrentHolidayOccurrences,
   getUpcomingHolidayOccurrences,
   HolidayOccurrence,
 } from "../util/holiday.util";
@@ -36,6 +37,13 @@ const getReadableDate = (dateString: string) =>
     day: "numeric",
     timeZone: "Pacific/Auckland",
   });
+
+const getTodayMessage = (holidayName: string) => {
+  if (holidayName === "Christmas Day") return "Meri Kirihimete";
+  if (holidayName === "Labour Day") return "Enjoy the long weekend";
+
+  return "Enjoy the public holiday";
+};
 
 export default function HolidayCountdownPage({
   simulatedNow,
@@ -73,6 +81,7 @@ export default function HolidayCountdownPage({
     now,
     UPCOMING_OVERLAY_LIMIT + 1,
   );
+  const [currentOccurrence] = getCurrentHolidayOccurrences(holidays, now);
   const nextOccurrence = holidayOccurrences[0];
 
   if (!nextOccurrence) {
@@ -134,10 +143,23 @@ export default function HolidayCountdownPage({
 
   const pageStyle = {
     "--holiday-accent": nextHoliday.theme?.accentColor ?? "#df3b20",
+    "--today-holiday-accent": currentOccurrence?.holiday.theme?.accentColor ?? "#efb80b",
   } as CSSProperties;
 
   return (
     <main className={styles.page} style={pageStyle}>
+      {currentOccurrence && (
+        <section
+          className={styles.todayBanner}
+          aria-label={`Today is ${currentOccurrence.holiday.name}`}
+        >
+          <span>Today in Aotearoa</span>
+          <strong>{currentOccurrence.holiday.name}</strong>
+          <p>
+            {getReadableDate(currentOccurrence.date)} · {getTodayMessage(currentOccurrence.holiday.name)}
+          </p>
+        </section>
+      )}
       <section className={heroClassName}>
         <div className={styles.heroCopy}>
           <div className={styles.siteMark}>
