@@ -103,6 +103,14 @@ describe("observed holiday dates", () => {
   });
 });
 
+describe("holiday themes", () => {
+  it("gives New Year's Day its first-light gold accent", () => {
+    const newYearsDay = realHolidays.find((holiday) => holiday.name === "New Year's Day");
+
+    expect(newYearsDay?.theme?.accentColor).toBe("#fbbf24");
+  });
+});
+
 describe("getCurrentHolidayOccurrences", () => {
   const holidays: Holiday[] = [
     holiday("Christmas Day", ["2026-12-25"]),

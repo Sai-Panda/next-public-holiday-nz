@@ -75,6 +75,131 @@
   display: none;
 }
 
+.newYearHero {
+  --red: var(--holiday-accent);
+  min-height: 700px;
+  grid-template-columns: minmax(430px, 0.92fr) minmax(600px, 1.08fr);
+  background:
+    radial-gradient(circle at 18% 22%, rgb(255 255 255 / 7%) 0 1px, transparent 1px 100%),
+    linear-gradient(145deg, #11233c 0%, #193855 58%, #0c2439 100%);
+  background-size: 7px 7px, auto;
+}
+
+.newYearHero::before {
+  display: none;
+}
+
+.newYearHero::after {
+  display: none;
+}
+
+.newYearHero .heroCopy {
+  padding-right: clamp(36px, 4.5vw, 78px);
+}
+
+.newYearHero .siteMark span:last-child,
+.newYearHero .eyebrow {
+  color: #ffe09a;
+}
+
+.newYearHero .heroCopy h1 {
+  max-width: 650px;
+  font-size: clamp(4.5rem, 7.8vw, 8.2rem);
+  line-height: 0.82;
+}
+
+.newYearHero .heroDate {
+  border-color: var(--holiday-accent);
+  color: #ffe7b2;
+}
+
+.newYearHero .countdownDivider {
+  color: color-mix(in srgb, var(--holiday-accent) 62%, white);
+}
+
+.newYearHero .historyLink {
+  border-color: #ffe09a;
+  color: #ffe09a;
+}
+
+.newYearStage {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, #193855 0%, #31536c 43%, #f1bd5b 43.2%, #f3e6cd 100%);
+}
+
+.newYearSun {
+  position: absolute;
+  right: clamp(-54px, -3vw, -20px);
+  bottom: 88px;
+  width: min(51vw, 520px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--holiday-accent);
+  box-shadow:
+    0 0 0 clamp(22px, 3vw, 44px) rgb(251 191 36 / 18%),
+    0 0 0 clamp(52px, 7vw, 94px) rgb(251 191 36 / 9%);
+}
+
+.newYearHorizon {
+  position: absolute;
+  right: 0;
+  bottom: 176px;
+  left: 8%;
+  height: 7px;
+  background: #11233c;
+  box-shadow: 0 -16px 0 rgb(17 35 60 / 12%);
+}
+
+.newYearSparkle {
+  position: absolute;
+  z-index: 2;
+  width: clamp(1.3rem, 2.2vw, 2.1rem);
+  color: #fff1c9;
+}
+
+.newYearSparkleOne {
+  top: 18%;
+  right: 14%;
+}
+
+.newYearSparkleTwo {
+  top: 31%;
+  right: 32%;
+  width: clamp(0.8rem, 1.3vw, 1.2rem);
+}
+
+.newYearCaption {
+  position: absolute;
+  right: clamp(26px, 4vw, 72px);
+  bottom: 18px;
+  z-index: 3;
+  display: flex;
+  max-width: 470px;
+  margin: 0;
+  padding: 9px 12px;
+  color: #fff8e9;
+  background: #11233c;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.63rem;
+  letter-spacing: 0.08em;
+  line-height: 1.45;
+  transform: rotate(1deg);
+}
+
+.newYearCaption strong {
+  padding-right: 9px;
+  color: #ffe09a;
+}
+
+.newYearCaption span {
+  padding-left: 9px;
+  border-left: 1px solid rgb(255 248 233 / 45%);
+}
+
 .christmasHero {
   --red: var(--holiday-accent);
   min-height: 700px;
@@ -898,6 +1023,13 @@
     background-size: 7px 7px, auto;
   }
 
+  .newYearHero .heroCopy {
+    background:
+      radial-gradient(circle at 20% 20%, rgb(255 255 255 / 7%) 0 1px, transparent 1px 100%),
+      linear-gradient(145deg, #11233c 0%, #193855 58%, #0c2439 100%);
+    background-size: 7px 7px, auto;
+  }
+
   .boxingHero .heroCopy {
     background:
       radial-gradient(circle at 20% 20%, rgb(255 255 255 / 7%) 0 1px, transparent 1px 100%),
@@ -923,6 +1055,10 @@
       radial-gradient(circle at 70% 30%, rgb(8 35 49 / 7%) 0 1px, transparent 1px 100%),
       #f1e6d0;
     background-size: 8px 8px, auto;
+  }
+
+  .newYearStage {
+    min-height: 480px;
   }
 
   .christmasStamp {
@@ -1028,11 +1164,19 @@
     min-height: 560px;
   }
 
+  .newYearHero .heroCopy {
+    min-height: 560px;
+  }
+
   .christmasHero .heroCopy h1 {
     font-size: clamp(3.35rem, 15.6vw, 5.2rem);
   }
 
   .boxingHero .heroCopy h1 {
+    font-size: clamp(3.35rem, 15.6vw, 5.2rem);
+  }
+
+  .newYearHero .heroCopy h1 {
     font-size: clamp(3.35rem, 15.6vw, 5.2rem);
   }
 
@@ -1065,6 +1209,29 @@
 
   .boxingStage {
     padding: 80px 34px 88px;
+  }
+
+  .newYearStage {
+    min-height: 380px;
+  }
+
+  .newYearSun {
+    right: -48px;
+    bottom: 60px;
+    width: min(122vw, 480px);
+  }
+
+  .newYearHorizon {
+    bottom: 127px;
+    left: 0;
+    height: 5px;
+  }
+
+  .newYearCaption {
+    right: 18px;
+    bottom: 18px;
+    max-width: calc(100% - 36px);
+    font-size: 0.56rem;
   }
 
   .boxingParcel {
