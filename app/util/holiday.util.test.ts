@@ -117,6 +117,12 @@ describe("holiday themes", () => {
 
     expect(dayAfterNewYearsDay?.theme?.accentColor).toBe("#5a8758");
   });
+
+  it("gives Waitangi Day its draft Treaty-red accent", () => {
+    const waitangiDay = realHolidays.find((holiday) => holiday.name === "Waitangi Day");
+
+    expect(waitangiDay?.theme?.accentColor).toBe("#9f2734");
+  });
 });
 
 describe("getCurrentHolidayOccurrences", () => {

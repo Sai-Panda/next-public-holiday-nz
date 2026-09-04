@@ -15,3 +15,8 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 - Treat the existing holiday countdown page as the design system for every new holiday theme. Preserve the page structure, typography, countdown, date treatment, upcoming-holidays section, and responsive behaviour unless the product direction explicitly changes.
 - Limit a new theme to a holiday-specific accent colour and a restrained right-hand hero graphic that follows the established dark-ink/cream, uppercase editorial language. Do not introduce a different page layout, navigation, or a new visual system for an individual holiday.
+- Carry an active holiday theme's accent through the full page, including the upcoming-holidays section, so it reads as one cohesive treatment.
+
+## Preview after UI changes
+
+- After each user-visible UI change, open or reload the relevant local page in a browser so the user can inspect it. Use the `/dev?date=...` route when a simulated holiday date is needed, and mark the preview tab as a persistent deliverable so it remains open after the response ends.

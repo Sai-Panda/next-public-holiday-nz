@@ -22,6 +22,7 @@ import {
 import styles from "./holiday-countdown-page.module.css";
 import { PhotoCredit } from "./photo-credit";
 import pohutukawaImage from "../../public/pohutukawa-christmas.jpg";
+import waitangiTreatyImage from "../../public/te-tiriti-waitangi-sheet.jpg";
 
 const UPCOMING_LIST_LIMIT = 4;
 const UPCOMING_OVERLAY_LIMIT = 10;
@@ -103,6 +104,7 @@ export default function HolidayCountdownPage({
   const isLabourDay = nextHoliday.name === "Labour Day";
   const isNewYearsDay = nextHoliday.name === "New Year's Day";
   const isDayAfterNewYearsDay = nextHoliday.name === "Day after New Year's Day";
+  const isWaitangiDay = nextHoliday.name === "Waitangi Day";
   const isChristmasDay = nextHoliday.name === "Christmas Day";
   const isBoxingDay = nextHoliday.name === "Boxing Day";
   const countdown = getCountdownParts(nextOccurrence.date, now);
@@ -160,17 +162,17 @@ export default function HolidayCountdownPage({
       ? `${styles.hero} ${styles.newYearHero}`
       : isDayAfterNewYearsDay
         ? `${styles.hero} ${styles.dayAfterNewYearHero}`
-      : isChristmasDay
-      ? `${styles.hero} ${styles.christmasHero} ${styles.christmasCoastal}`
-      : isBoxingDay
-        ? `${styles.hero} ${styles.boxingHero}`
-      : `${styles.hero} ${styles.genericHero}`;
+        : isWaitangiDay
+          ? `${styles.hero} ${styles.waitangiHero}`
+          : isChristmasDay
+            ? `${styles.hero} ${styles.christmasHero} ${styles.christmasCoastal}`
+            : isBoxingDay
+              ? `${styles.hero} ${styles.boxingHero}`
+              : `${styles.hero} ${styles.genericHero}`;
 
   const pageStyle = {
     "--holiday-accent": nextHoliday.theme?.accentColor ?? "#df3b20",
-    "--upcoming-accent": isDayAfterNewYearsDay
-      ? nextHoliday.theme?.accentColor
-      : "#df3b20",
+    "--upcoming-accent": nextHoliday.theme?.accentColor ?? "#df3b20",
     "--today-holiday-accent": currentOccurrence?.holiday.theme?.accentColor ?? "#efb80b",
   } as CSSProperties;
 
@@ -375,6 +377,38 @@ export default function HolidayCountdownPage({
             </p>
           </div>
         )}
+
+        {isWaitangiDay && (
+          <div className={styles.waitangiStage}>
+            <div className={styles.waitangiTreatyFrame}>
+              <Image
+                src={waitangiTreatyImage}
+                alt="The Waitangi Sheet of Te Tiriti o Waitangi, drawn up on 5 February 1840 and signed at Waitangi and elsewhere around Aotearoa New Zealand"
+                priority
+                sizes="(max-width: 720px) 76vw, (max-width: 1150px) 360px, 396px"
+                className={styles.waitangiTreatyImage}
+              />
+            </div>
+            <p className={styles.waitangiCaption}>
+              <strong>TE TIRITI O WAITANGI · WAITANGI SHEET</strong>
+              <span>Drawn up 5 February 1840 · Archives ref. IA9/9 Sheet 1</span>
+              <a
+                href="https://www.flickr.com/photos/archivesnz/15858996150/in/album-72157640803885745"
+                target="_blank"
+                rel="noopener noreferrer"
+      >
+        ARCHIVES NEW ZEALAND ↗
+      </a>
+      <a
+        href="https://creativecommons.org/licenses/by-nc-nd/2.0/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        CC BY-NC-ND 2.0 ↗
+      </a>
+    </p>
+  </div>
+)}
 
         {isBoxingDay && (
           <div

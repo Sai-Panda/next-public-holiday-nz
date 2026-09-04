@@ -75,6 +75,117 @@
   display: none;
 }
 
+.waitangiHero {
+  --red: var(--holiday-accent);
+  min-height: 700px;
+  grid-template-columns: minmax(390px, 1.12fr) minmax(420px, 0.88fr);
+  background:
+    radial-gradient(circle at 18% 22%, rgb(255 255 255 / 7%) 0 1px, transparent 1px 100%),
+    #1d211c;
+  background-size: 7px 7px, auto;
+}
+
+.waitangiHero::after {
+  inset: 0 0 0 53%;
+  background:
+    linear-gradient(115deg, transparent 0 7%, #f6f0e5 7.15% 100%),
+    radial-gradient(circle at 70% 30%, rgb(29 33 28 / 8%) 0 1px, transparent 1px 100%);
+  background-size: auto, 8px 8px;
+}
+
+.waitangiHero .heroCopy {
+  padding-right: clamp(36px, 4.5vw, 78px);
+}
+
+.waitangiHero .siteMark span:last-child,
+.waitangiHero .eyebrow {
+  color: #e0a28e;
+}
+
+.waitangiHero .heroCopy h1 {
+  max-width: 650px;
+  font-size: clamp(4.5rem, 7.8vw, 8.2rem);
+  line-height: 0.82;
+}
+
+.waitangiHero .heroDate {
+  border-color: var(--holiday-accent);
+  color: #f2d4c8;
+}
+
+.waitangiHero .countdownDivider {
+  color: color-mix(in srgb, var(--holiday-accent) 62%, white);
+}
+
+.waitangiHero .historyLink {
+  border-color: #e0a28e;
+  color: #e0a28e;
+}
+
+.waitangiStage {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  padding: 48px clamp(24px, 3vw, 48px) 88px clamp(48px, 4.5vw, 78px);
+}
+
+.waitangiTreatyFrame {
+  position: relative;
+  width: min(320px, 82%);
+  aspect-ratio: 1092 / 2047;
+  border: 10px solid #f6f0e5;
+  box-shadow:
+    20px 22px 0 #551923,
+    30px 32px 0 #d8c7a9;
+  transform: rotate(-1.5deg);
+}
+
+.waitangiTreatyImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.waitangiCaption {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 470px;
+  margin: 24px 0 0;
+  padding: 9px 12px;
+  color: #f6f0e5;
+  background: #1d211c;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.63rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.45;
+  transform: rotate(1deg);
+}
+
+.waitangiCaption strong {
+  padding-right: 9px;
+  color: #e0a28e;
+}
+
+.waitangiCaption span {
+  padding-left: 9px;
+  border-left: 1px solid rgb(246 240 229 / 45%);
+}
+
+.waitangiCaption a {
+  padding-left: 9px;
+  border-left: 1px solid rgb(246 240 229 / 45%);
+  color: #e0a28e;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
 .newYearHero {
   --red: var(--holiday-accent);
   min-height: 700px;
@@ -916,6 +1027,29 @@
     var(--ink-deep);
 }
 
+.waitangiHero + .upcomingSection {
+  color: #f6f0e5;
+  background:
+    linear-gradient(130deg, transparent 0 68%, rgb(159 39 52 / 20%) 68.1% 100%),
+    #1d211c;
+}
+
+.waitangiHero + .upcomingSection .holidayRow {
+  border-color: rgb(246 240 229 / 22%);
+  background: rgb(246 240 229 / 5%);
+}
+
+.waitangiHero + .upcomingSection .holidayRow a:hover,
+.waitangiHero + .upcomingSection .holidayRow a:focus-visible {
+  color: #e0a28e;
+}
+
+.waitangiHero + .upcomingSection .showMoreButton:hover,
+.waitangiHero + .upcomingSection .showMoreButton:focus-visible {
+  color: #f6f0e5;
+  background: var(--holiday-accent);
+}
+
 .upcomingHeader {
   display: flex;
   align-items: end;
@@ -1190,6 +1324,13 @@
     background-size: 7px 7px, auto;
   }
 
+  .waitangiHero .heroCopy {
+    background:
+      radial-gradient(circle at 20% 20%, rgb(255 255 255 / 7%) 0 1px, transparent 1px 100%),
+      #1d211c;
+    background-size: 7px 7px, auto;
+  }
+
   .boxingHero .heroCopy {
     background:
       radial-gradient(circle at 20% 20%, rgb(255 255 255 / 7%) 0 1px, transparent 1px 100%),
@@ -1222,6 +1363,14 @@
     background:
       radial-gradient(circle at 70% 30%, rgb(8 35 49 / 7%) 0 1px, transparent 1px 100%),
       #f1e6d0;
+    background-size: 8px 8px, auto;
+  }
+
+  .waitangiStage {
+    padding: 72px clamp(46px, 9vw, 100px) 76px;
+    background:
+      radial-gradient(circle at 70% 30%, rgb(29 33 28 / 7%) 0 1px, transparent 1px 100%),
+      #f6f0e5;
     background-size: 8px 8px, auto;
   }
 
@@ -1340,6 +1489,10 @@
     min-height: 560px;
   }
 
+  .waitangiHero .heroCopy {
+    min-height: 560px;
+  }
+
   .christmasHero .heroCopy h1 {
     font-size: clamp(3.35rem, 15.6vw, 5.2rem);
   }
@@ -1353,6 +1506,10 @@
   }
 
   .dayAfterNewYearHero .heroCopy h1 {
+    font-size: clamp(3.35rem, 15.6vw, 5.2rem);
+  }
+
+  .waitangiHero .heroCopy h1 {
     font-size: clamp(3.35rem, 15.6vw, 5.2rem);
   }
 
@@ -1389,6 +1546,26 @@
 
   .dayAfterNewYearStage {
     padding: 70px 28px 84px;
+  }
+
+  .waitangiStage {
+    padding: 54px 18px 70px;
+  }
+
+  .waitangiTreatyFrame {
+    width: min(396px, 76%);
+    border-width: 7px;
+    box-shadow:
+      10px 12px 0 #551923,
+      17px 19px 0 #d8c7a9;
+    transform: rotate(-1deg);
+  }
+
+  .waitangiCaption {
+    align-self: stretch;
+    margin: 24px 0 0;
+    max-width: none;
+    font-size: 0.52rem;
   }
 
   .dayAfterNewYearCalendar {
