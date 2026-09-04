@@ -125,9 +125,10 @@
 .waitangiStage {
   position: relative;
   z-index: 1;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   min-width: 0;
-  place-items: start center;
   padding: 48px clamp(24px, 3vw, 48px) 88px clamp(48px, 4.5vw, 78px);
 }
 
@@ -150,13 +151,11 @@
 }
 
 .waitangiCaption {
-  position: absolute;
-  right: clamp(26px, 4vw, 72px);
-  bottom: 18px;
+  position: relative;
   z-index: 3;
   display: flex;
   max-width: 470px;
-  margin: 0;
+  margin: 24px 0 0;
   padding: 9px 12px;
   color: #f6f0e5;
   background: #1d211c;
@@ -1562,9 +1561,8 @@
   }
 
   .waitangiCaption {
-    right: 16px;
-    bottom: 24px;
-    left: 16px;
+    align-self: stretch;
+    margin: 24px 0 0;
     max-width: none;
     font-size: 0.52rem;
   }

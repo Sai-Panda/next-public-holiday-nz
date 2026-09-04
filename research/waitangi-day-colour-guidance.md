@@ -1,6 +1,6 @@
 # Waitangi Day colour guidance
 
-**Status:** research only; no product code or assets were changed.  
+**Status:** research and provenance record for the current Waitangi Day treatment.
 **Reviewed:** 5 September 2026  
 **Scope:** a respectful Waitangi Day theme for the Aotearoa New Zealand public-holiday countdown.
 
@@ -9,6 +9,10 @@
 There is **no official Waitangi Day colour palette**. Do not present any palette as “the colours of Waitangi Day”. Waitangi Day is New Zealand’s national day and marks the signing of Te Tiriti o Waitangi / the Treaty of Waitangi on 6 February 1840. [Manatū Taonga: *Waitangi Day*](https://nzhistory.govt.nz/politics/treaty/waitangi-day)
 
 The strongest source-backed routes are flag colours that have an explicitly documented relationship to the day, or quiet documentary/site materials. They require careful framing: colour can refer to a flag or a physical setting; it should not claim to represent all Māori, Te Tiriti, or Waitangi Day itself.
+
+## Hero image provenance and rights
+
+The hero image is the **Waitangi Sheet of te Tiriti o Waitangi (Archives reference IA9/9 Sheet 1)**, published by [Archives New Zealand on Flickr](https://www.flickr.com/photos/archivesnz/15858996150/in/album-72157640803885745). The source page describes the sheet and permits contextual reuse with attribution, while prohibiting advertising or commercial use and requiring that the document remain recognisable. Flickr identifies the work as **CC BY-NC-ND 2.0**; retain the source credit and [license link](https://creativecommons.org/licenses/by-nc-nd/2.0/) wherever the asset is published. This repository uses the unaltered scan as a documentary hero image, with no text or graphics over the document itself.
 
 ## Evidence-backed colour references
 
