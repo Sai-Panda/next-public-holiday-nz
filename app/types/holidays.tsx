@@ -52,6 +52,12 @@ export const holidays: Holiday[] = [
     // Closest Heroicons match to a treaty scroll: Waitangi Day marks the
     // signing of the Treaty of Waitangi.
     emoji: DocumentTextIcon,
+    // Draft Treaty red: a restrained reference to the red in the Tino
+    // Rangatiratanga flag, not an official Waitangi Day colour. Cultural
+    // review is still required before this treatment is considered final.
+    theme: {
+      accentColor: "#9f2734",
+    },
   },
   {
     name: "Good Friday",

@@ -36,10 +36,18 @@
 - New Year's Day uses the image-free First Light direction: a dawn-gold sun,
   abstract horizon, and restrained sparkles that reflect Aotearoa's early start
   to the new day. Keep it separate from Matariki and Māori visual language.
+- Waitangi Day uses the photo-led Grounds Frame direction: dark ink, warm cream,
+  and a restrained draft Treaty-red accent. Keep the right-hand hero as a
+  placeholder for a licensed, human-created Waitangi Treaty Grounds photograph
+  or an appropriately reused Te Tiriti image; do not reproduce flags, koru, or
+  invented Māori visual motifs. Cultural review remains required before the
+  treatment is considered final.
 - New holiday themes must remain close to the established countdown design system:
   retain the existing structure, typography, countdown and date treatments,
   upcoming-holidays section, and responsive behaviour. Individual themes may
   vary only the accent colour and a restrained right-hand hero graphic.
+- The active holiday's accent colour carries through the upcoming-holidays
+  section so the page reads as one cohesive theme.
 - When a holiday is observed on a different day, show both the observed date and
   the holiday's actual calendar date wherever dates are presented.
 
