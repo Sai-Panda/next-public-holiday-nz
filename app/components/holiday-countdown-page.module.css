@@ -200,6 +200,160 @@
   border-left: 1px solid rgb(255 248 233 / 45%);
 }
 
+.dayAfterNewYearHero {
+  --red: var(--holiday-accent);
+  min-height: 700px;
+  grid-template-columns: minmax(430px, 0.92fr) minmax(600px, 1.08fr);
+  background:
+    radial-gradient(circle at 18% 22%, rgb(255 255 255 / 7%) 0 1px, transparent 1px 100%),
+    var(--ink);
+  background-size: 7px 7px, auto;
+}
+
+.dayAfterNewYearHero::after {
+  inset: 0 0 0 45%;
+  background:
+    linear-gradient(115deg, transparent 0 7%, #f1e6d0 7.15% 100%),
+    radial-gradient(circle at 70% 30%, rgb(8 35 49 / 8%) 0 1px, transparent 1px 100%);
+  background-size: auto, 8px 8px;
+}
+
+.dayAfterNewYearHero .heroCopy {
+  padding-right: clamp(36px, 4.5vw, 78px);
+}
+
+.dayAfterNewYearHero .siteMark span:last-child,
+.dayAfterNewYearHero .eyebrow {
+  color: #d6de98;
+}
+
+.dayAfterNewYearHero .heroCopy h1 {
+  max-width: 650px;
+  font-size: clamp(4.5rem, 7.8vw, 8.2rem);
+  line-height: 0.82;
+}
+
+.dayAfterNewYearHero .heroDate {
+  border-color: var(--holiday-accent);
+  color: #e7f3df;
+}
+
+.dayAfterNewYearHero .countdownDivider {
+  color: color-mix(in srgb, var(--holiday-accent) 62%, white);
+}
+
+.dayAfterNewYearHero .historyLink {
+  border-color: #d6de98;
+  color: #d6de98;
+}
+
+.dayAfterNewYearStage {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-width: 0;
+  place-items: center;
+  padding: 86px clamp(32px, 4vw, 72px) 58px clamp(86px, 7vw, 128px);
+}
+
+.dayAfterNewYearCalendar {
+  position: relative;
+  width: min(570px, 100%);
+  aspect-ratio: 1 / 0.78;
+  margin-top: 40px;
+}
+
+.dayAfterNewYearRevealedPage,
+.dayAfterNewYearTornPage {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 10px solid #faf4e8;
+  font-family: var(--font-geist-mono), monospace;
+  text-align: center;
+}
+
+.dayAfterNewYearRevealedPage {
+  inset: 21% 9% 2% 18%;
+  color: #faf4e8;
+  background: #082331;
+  box-shadow: 20px 22px 0 #315f4c;
+  transform: rotate(3deg);
+}
+
+.dayAfterNewYearTornPage {
+  top: 0;
+  right: 10%;
+  left: 0;
+  height: 62%;
+  color: #082331;
+  background: var(--holiday-accent);
+  box-shadow: 10px 11px 0 rgb(8 35 49 / 18%);
+  clip-path: polygon(0 0, 100% 0, 100% 87%, 89% 91%, 78% 87%, 66% 94%, 52% 88%, 38% 93%, 25% 87%, 11% 92%, 0 87%);
+  transform: rotate(-3deg);
+}
+
+.dayAfterNewYearRevealedPage span,
+.dayAfterNewYearTornPage span {
+  font-size: clamp(0.56rem, 0.9vw, 0.72rem);
+  font-weight: 900;
+  letter-spacing: 0.13em;
+}
+
+.dayAfterNewYearRevealedPage span {
+  color: #d6de98;
+}
+
+.dayAfterNewYearRevealedPage strong,
+.dayAfterNewYearTornPage strong {
+  max-width: 90%;
+  margin-top: 9px;
+  font-size: clamp(1.35rem, 2.7vw, 2.35rem);
+  letter-spacing: -0.08em;
+  line-height: 0.86;
+}
+
+.dayAfterNewYearTornPage strong {
+  position: absolute;
+  bottom: 5%;
+  max-width: none;
+  margin: 0;
+  color: #082331;
+  font-size: clamp(1.25rem, 2.2vw, 2rem);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.dayAfterNewYearCaption {
+  position: absolute;
+  right: clamp(26px, 4vw, 72px);
+  bottom: 18px;
+  z-index: 3;
+  display: flex;
+  max-width: 470px;
+  margin: 0;
+  padding: 9px 12px;
+  color: #faf4e8;
+  background: #082331;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.63rem;
+  letter-spacing: 0.08em;
+  line-height: 1.45;
+  transform: rotate(1deg);
+}
+
+.dayAfterNewYearCaption strong {
+  padding-right: 9px;
+  color: #d6de98;
+}
+
+.dayAfterNewYearCaption span {
+  padding-left: 9px;
+  border-left: 1px solid rgb(250 244 232 / 45%);
+}
+
 .christmasHero {
   --red: var(--holiday-accent);
   min-height: 700px;
@@ -529,9 +683,9 @@
   top: 28px;
   left: clamp(28px, 4vw, 70px);
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: max-content 120px;
   column-gap: 14px;
-  width: max-content;
+  width: fit-content;
   padding-right: 14px;
   border-right: 1px solid rgb(250 244 232 / 40%);
   font-family: var(--font-geist-mono), monospace;
@@ -549,7 +703,6 @@
   grid-row: 1 / 3;
   grid-column: 2;
   align-self: center;
-  max-width: 120px;
   color: var(--yellow);
 }
 
@@ -759,7 +912,7 @@
   padding: clamp(54px, 7vw, 96px) clamp(24px, 7vw, 112px);
   color: var(--canvas-light);
   background:
-    linear-gradient(130deg, transparent 0 68%, rgb(223 59 32 / 18%) 68.1% 100%),
+    linear-gradient(130deg, transparent 0 68%, color-mix(in srgb, var(--upcoming-accent) 18%, transparent) 68.1% 100%),
     var(--ink-deep);
 }
 
@@ -773,7 +926,7 @@
 }
 
 .upcomingHeader p {
-  color: var(--red);
+  color: var(--upcoming-accent);
 }
 
 .upcomingHeader h2 {
@@ -1030,6 +1183,13 @@
     background-size: 7px 7px, auto;
   }
 
+  .dayAfterNewYearHero .heroCopy {
+    background:
+      radial-gradient(circle at 20% 20%, rgb(255 255 255 / 7%) 0 1px, transparent 1px 100%),
+      var(--ink);
+    background-size: 7px 7px, auto;
+  }
+
   .boxingHero .heroCopy {
     background:
       radial-gradient(circle at 20% 20%, rgb(255 255 255 / 7%) 0 1px, transparent 1px 100%),
@@ -1050,6 +1210,14 @@
   }
 
   .boxingStage {
+    padding: 72px clamp(46px, 9vw, 100px) 76px;
+    background:
+      radial-gradient(circle at 70% 30%, rgb(8 35 49 / 7%) 0 1px, transparent 1px 100%),
+      #f1e6d0;
+    background-size: 8px 8px, auto;
+  }
+
+  .dayAfterNewYearStage {
     padding: 72px clamp(46px, 9vw, 100px) 76px;
     background:
       radial-gradient(circle at 70% 30%, rgb(8 35 49 / 7%) 0 1px, transparent 1px 100%),
@@ -1168,6 +1336,10 @@
     min-height: 560px;
   }
 
+  .dayAfterNewYearHero .heroCopy {
+    min-height: 560px;
+  }
+
   .christmasHero .heroCopy h1 {
     font-size: clamp(3.35rem, 15.6vw, 5.2rem);
   }
@@ -1177,6 +1349,10 @@
   }
 
   .newYearHero .heroCopy h1 {
+    font-size: clamp(3.35rem, 15.6vw, 5.2rem);
+  }
+
+  .dayAfterNewYearHero .heroCopy h1 {
     font-size: clamp(3.35rem, 15.6vw, 5.2rem);
   }
 
@@ -1209,6 +1385,31 @@
 
   .boxingStage {
     padding: 80px 34px 88px;
+  }
+
+  .dayAfterNewYearStage {
+    padding: 70px 28px 84px;
+  }
+
+  .dayAfterNewYearCalendar {
+    width: min(440px, 88%);
+    margin-top: 0;
+  }
+
+  .dayAfterNewYearRevealedPage,
+  .dayAfterNewYearTornPage {
+    border-width: 7px;
+  }
+
+  .dayAfterNewYearRevealedPage {
+    box-shadow: 10px 12px 0 #315f4c;
+  }
+
+  .dayAfterNewYearCaption {
+    right: 18px;
+    bottom: 18px;
+    max-width: calc(100% - 36px);
+    font-size: 0.56rem;
   }
 
   .newYearStage {

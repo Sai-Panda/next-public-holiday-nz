@@ -102,6 +102,7 @@ export default function HolidayCountdownPage({
     : undefined;
   const isLabourDay = nextHoliday.name === "Labour Day";
   const isNewYearsDay = nextHoliday.name === "New Year's Day";
+  const isDayAfterNewYearsDay = nextHoliday.name === "Day after New Year's Day";
   const isChristmasDay = nextHoliday.name === "Christmas Day";
   const isBoxingDay = nextHoliday.name === "Boxing Day";
   const countdown = getCountdownParts(nextOccurrence.date, now);
@@ -157,6 +158,8 @@ export default function HolidayCountdownPage({
     ? styles.hero
     : isNewYearsDay
       ? `${styles.hero} ${styles.newYearHero}`
+      : isDayAfterNewYearsDay
+        ? `${styles.hero} ${styles.dayAfterNewYearHero}`
       : isChristmasDay
       ? `${styles.hero} ${styles.christmasHero} ${styles.christmasCoastal}`
       : isBoxingDay
@@ -165,6 +168,9 @@ export default function HolidayCountdownPage({
 
   const pageStyle = {
     "--holiday-accent": nextHoliday.theme?.accentColor ?? "#df3b20",
+    "--upcoming-accent": isDayAfterNewYearsDay
+      ? nextHoliday.theme?.accentColor
+      : "#df3b20",
     "--today-holiday-accent": currentOccurrence?.holiday.theme?.accentColor ?? "#efb80b",
   } as CSSProperties;
 
@@ -344,6 +350,28 @@ export default function HolidayCountdownPage({
             <p className={styles.newYearCaption}>
               <strong>FIRST LIGHT</strong>
               <span>A NEW YEAR IN AOTEAROA</span>
+            </p>
+          </div>
+        )}
+
+        {isDayAfterNewYearsDay && (
+          <div
+            className={styles.dayAfterNewYearStage}
+            role="img"
+            aria-label="A torn calendar page for New Year's Day revealing one more day off"
+          >
+            <div className={styles.dayAfterNewYearCalendar}>
+              <div className={styles.dayAfterNewYearRevealedPage}>
+                <span>PUBLIC HOLIDAY</span>
+                <strong>ONE MORE<br />DAY OFF</strong>
+              </div>
+              <div className={styles.dayAfterNewYearTornPage}>
+                <strong>NEW YEAR&apos;S DAY</strong>
+              </div>
+            </div>
+            <p className={styles.dayAfterNewYearCaption}>
+              <strong>TURN THE PAGE</strong>
+              <span>THE SUMMER BREAK KEEPS GOING.</span>
             </p>
           </div>
         )}

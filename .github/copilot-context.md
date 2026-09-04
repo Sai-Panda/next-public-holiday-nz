@@ -36,6 +36,10 @@
 - New Year's Day uses the image-free First Light direction: a dawn-gold sun,
   abstract horizon, and restrained sparkles that reflect Aotearoa's early start
   to the new day. Keep it separate from Matariki and Māori visual language.
+- New holiday themes must remain close to the established countdown design system:
+  retain the existing structure, typography, countdown and date treatments,
+  upcoming-holidays section, and responsive behaviour. Individual themes may
+  vary only the accent colour and a restrained right-hand hero graphic.
 - When a holiday is observed on a different day, show both the observed date and
   the holiday's actual calendar date wherever dates are presented.
 

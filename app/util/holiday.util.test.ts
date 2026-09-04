@@ -109,6 +109,14 @@ describe("holiday themes", () => {
 
     expect(newYearsDay?.theme?.accentColor).toBe("#fbbf24");
   });
+
+  it("gives Day after New Year's Day its rimu-shade accent", () => {
+    const dayAfterNewYearsDay = realHolidays.find(
+      (holiday) => holiday.name === "Day after New Year's Day",
+    );
+
+    expect(dayAfterNewYearsDay?.theme?.accentColor).toBe("#5a8758");
+  });
 });
 
 describe("getCurrentHolidayOccurrences", () => {
