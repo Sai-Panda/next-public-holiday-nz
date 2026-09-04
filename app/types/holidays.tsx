@@ -1,7 +1,6 @@
 import { Holiday } from "../types/holiday";
 import {
   SparklesIcon,
-  MoonIcon,
   DocumentTextIcon,
   HeartIcon,
   SunIcon,
@@ -36,9 +35,11 @@ export const holidays: Holiday[] = [
       "2028-01-04": "2028-01-02",
     },
     infoUrl: "https://www.officeholidays.com/holidays/new-zealand/day-after-new-years-day",
-    // A distinct NZ/Hogmanay-style extra day off: sleeping in and
-    // recovering from New Year's Eve, not a "new day" in its own right.
-    emoji: MoonIcon,
+    // Rimu shade: a native-forest green for the extra day off that follows
+    // New Year's Day, distinct from New Year's dawn gold.
+    theme: {
+      accentColor: "#5a8758",
+    },
   },
   {
     name: "Waitangi Day",
