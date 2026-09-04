@@ -88,6 +88,21 @@ describe("getUpcomingHolidayOccurrences", () => {
   });
 });
 
+describe("observed holiday dates", () => {
+  it("retains the actual calendar date whenever an observation is shifted", () => {
+    const actualDate = (holidayName: string, observedDate: string) =>
+      realHolidays.find((holiday) => holiday.name === holidayName)
+        ?.actualDateByObservedDate?.[observedDate];
+
+    expect(actualDate("New Year's Day", "2028-01-03")).toBe("2028-01-01");
+    expect(actualDate("Day after New Year's Day", "2027-01-04")).toBe("2027-01-02");
+    expect(actualDate("Waitangi Day", "2027-02-08")).toBe("2027-02-06");
+    expect(actualDate("ANZAC Day", "2026-04-27")).toBe("2026-04-25");
+    expect(actualDate("Christmas Day", "2027-12-27")).toBe("2027-12-25");
+    expect(actualDate("Boxing Day", "2026-12-28")).toBe("2026-12-26");
+  });
+});
+
 describe("getCurrentHolidayOccurrences", () => {
   const holidays: Holiday[] = [
     holiday("Christmas Day", ["2026-12-25"]),
