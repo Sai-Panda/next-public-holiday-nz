@@ -154,6 +154,7 @@
   position: relative;
   z-index: 3;
   display: flex;
+  flex-wrap: wrap;
   max-width: 470px;
   margin: 24px 0 0;
   padding: 9px 12px;

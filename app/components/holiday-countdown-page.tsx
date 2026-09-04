@@ -396,12 +396,19 @@ export default function HolidayCountdownPage({
                 href="https://www.flickr.com/photos/archivesnz/15858996150/in/album-72157640803885745"
                 target="_blank"
                 rel="noopener noreferrer"
-              >
-                ARCHIVES NEW ZEALAND ↗
-              </a>
-            </p>
-          </div>
-        )}
+      >
+        ARCHIVES NEW ZEALAND ↗
+      </a>
+      <a
+        href="https://creativecommons.org/licenses/by-nc-nd/2.0/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        CC BY-NC-ND 2.0 ↗
+      </a>
+    </p>
+  </div>
+)}
 
         {isBoxingDay && (
           <div
