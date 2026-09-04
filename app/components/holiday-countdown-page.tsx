@@ -40,7 +40,6 @@ const getReadableDate = (dateString: string) =>
 
 const getTodayMessage = (holidayName: string) => {
   if (holidayName === "Christmas Day") return "Meri Kirihimete";
-  if (holidayName === "Labour Day") return "Enjoy the long weekend";
 
   return "Enjoy the public holiday";
 };
